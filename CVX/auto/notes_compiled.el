@@ -1,5 +1,5 @@
 (TeX-add-style-hook
- "notes"
+ "notes_compiled"
  (lambda ()
    (TeX-run-style-hooks
     "latex2e"

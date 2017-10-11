@@ -21,6 +21,7 @@
 
 \documentclass{article}
 
+\usepackage{pdfpages}
 \usepackage{fancyhdr} % Required for custom headers
 \usepackage{amsfonts}
 \usepackage{bm}
@@ -314,7 +315,7 @@
 
         \[X \in \bm{S}^n_+ \iff z^TXz \geq 0 \forall z\]
 
-        Note, that a linear combination of 
+        Note, that a linear combination of
 
         $\bm{S}^n_+ \text{ is a convex cone} $
 
@@ -326,14 +327,14 @@
   \clearpage
 
   {\Large Operations that preserve Convexity}
-  
+
 
   \begin{problemAnswer}{
       \begin{itemize}
       \item Can always work:
 
         \[\text{arbitrary } x_1,  x_2 \in \mathcal{C}, 0 \leq \theta \leq  1 \implies \theta x_1 \text{ and } (1 - \theta)x_2 \text{ is in the set }\]
-        
+
       \item Show that C is obtained from simple convex sets (hyperplanes,
         halfspaces, norm balls, ..) by operations that preserve convexity
         \begin{itemize}
@@ -343,10 +344,10 @@
         \item linear-fractional functions
         \end{itemize}
       \end{itemize}
-    }\end{problemAnswer}  
+    }\end{problemAnswer}
 
   \vspace{0.2 cm} \textbf{\large Preserving Convexity: Intersection}
-  
+
   \begin{problemAnswer}{
       \begin{itemize}
       \item Intersection of any number of convex functions is convex
@@ -359,7 +360,7 @@
       \item Intuition behind example
 
          Repheasing S: \[S_t = \{x \in \bm{R}^m | |p(t)| \leq 1\}\]
-         
+
          \begin{itemize}
          \item S$_t$ is a single point. It is the intersection of two parallel
            halfspaces (which are linear, as they are a linear combination of cos
@@ -370,13 +371,13 @@
            rotates, and changes width.
 
          \item Thus, S is the intersection of those slabs.
-           
-         \end{itemize}  
+
+         \end{itemize}
       \end{itemize}
-    }\end{problemAnswer}  
+    }\end{problemAnswer}
 
   \vspace{0.2 cm} \textbf{\large Preserving Convexity: Affine Function}
-  
+
   \begin{problemAnswer}{
       \begin{itemize}
       \item Suppose f: $\bm{R}^n \to \bm{R}^m$ is affine (f(x) = Ax + b with A $\in
@@ -402,8 +403,8 @@
 
       \end{itemize}
       \end{itemize}
-    }\end{problemAnswer}  
-  
+    }\end{problemAnswer}
+
 \end{homeworkProblemName}
 
 
