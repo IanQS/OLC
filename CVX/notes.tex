@@ -1,0 +1,410 @@
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Structured General Purpose Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when
+% writing assignment content.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{graphicx} % Required to insert images
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the
+% template
+\usepackage{amsmath}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ (\hmwkTitle)} % Top center header
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Topic \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkClass}{Convex Optimization} % Course/class
+\newcommand{\hmwkTitle}{CVX 101} % Assignment title
+\newcommand{\hmwkClassTime}{-} % Class/lecture time
+\newcommand{\hmwkAuthorName}{Ian Quah (itq)} % Your name
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:}\\
+\textmd{\hmwkTitle}}\\
+\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+% To have just one problem per page, simply put a \clearpage after each problem
+
+\newpage
+\begin{homeworkProblemName}{{\LARGE Week 2: Convex Sets}}
+
+  \vspace{0.2 cm} \textbf{{\large Affine sets}}
+
+  \begin{problemAnswer}{
+      \begin{itemize}
+      \item Defn: Contains the line through any two distinct points in
+        a set
+
+      \item Proof: Affine set contains line through any two points
+
+        Given:
+
+        1) $\{x | Ax = b\}$ (Set constructor)
+
+        2) x = $\theta x_1$ + $(1 - \theta)x_2$ with $\theta \in \bm{R}$  (Definition of affine)
+
+        3) A$x_1$ = b and A$x_2$ = b (Two points chosen arbitrarily)
+
+        \begin{align*}
+          Ax &= A(\theta x_1 + (1 - \theta)x_2) \tag{Fact 2}\\
+          Ax &= \theta Ax_1 + A(1 - \theta)x_2\\
+          Ax &= \theta b + (1 - \theta) b \tag{Fact 3}\\
+             &= b
+        \end{align*}
+
+      \item Conversely, any affine set can be expressed as solution set of system of linear
+        equations
+      \end{itemize}
+    }\end{problemAnswer}
+
+
+  \vspace{0.2 cm} \textbf{{\large Convex sets}}
+
+  \begin{problemAnswer}{
+
+      \begin{itemize}
+      \item  Line segment: between x$_1$ and x$_2$: all points
+
+        \[x = \theta x_1 + (1 - \theta) x_2, \text{ with } 0 \leq \theta \leq 1\]
+
+      \item Convex sets: contains line segment between any two points in the
+        set
+
+        \[x_1, x_2 \in \mathcal{C}, 0 \leq \theta \le 1 \implies \theta x_1 + (1 - \theta)x_2 \in \mathcal{C}\]
+      \end{itemize}
+    }\end{problemAnswer}
+
+  \vspace{0.2 cm} \textbf{\large Convex combination and convex hulls}
+
+  \begin{problemAnswer}{
+
+      \begin{itemize}
+        \item Convex combination of $x_1, ... , x_k$: any point x of the form
+          \[x = \theta_1x_1 + .... + \theta_kx_k \text{ with }\]
+            \[1) \theta_1 + ... + \theta_k = 1\]
+            \[2) \theta_i \geq 0\]
+        \item Convex hull conv S: set of all convex combinations of points in S
+
+          E.g: Consider a square with dots on all 4 sides. The area within the
+          set is the convex hull of the set S (which contains all 4 dots), as we
+          can represent any point \textit{WITHIN} the area as some convex combination of the 4 points (or less, if a $\theta$ is 0)
+      \end{itemize}
+    }\end{problemAnswer}
+
+  \clearpage
+
+  \vspace{0.2 cm} \textbf{\large Convex cone}
+
+  \begin{problemAnswer}{
+
+      \begin{itemize}
+        \item Conic (nonnegative) combination of $x_1, x_2$: any point x of the form
+          \[x = \theta_1x_1 + \theta_2x_2 \text{ with }\]
+          \[\theta_1, \theta_2 \geq 0\]
+        \item Convex cone: set that contains all conic combinations of points in
+          the set
+
+        \item visually: a pie slice. Lies in a plane even in high dimensions,
+          since we have 3 points
+
+      \end{itemize}
+    }\end{problemAnswer}
+
+  \vspace{0.2 cm} \textbf{\large Hyperplanes and halfspaces}
+
+  \begin{problemAnswer}{
+
+      \begin{itemize}
+        \item hyperplane: set of the form $\{x | a^Tx = b\}$ with a $\neq$ 0
+        \item halfspace: set of the form $\{x | a^Tx \leq b\}$ with a $\neq$ 0
+          such that a is the normal vector
+
+        \item hyperplanes are affine and convex, whereas halfspaces are convex
+
+        \item \textbf{Proof: Verifying why the halfspace is convex and NOT affine}
+
+          1) $\{x | a^Tx \leq b\}$ (Set constructor)
+
+          2) x = $\theta x_1$ + $(1 - \theta)x_2$ with $\theta \in \bm{R} $(Definition of affine)
+
+          3) x = $\theta x_1$ + $(1 - \theta)x_2$ with $0 \leq \theta \leq 1$ (Definition of convex)
+
+          4) $a^Tx_1$ $\leq$ b and $a^Tx_2$ $\leq$ b (Two points chosen arbitrarily)
+
+          \begin{align*}
+            \text{WTS: }a^Tx &\leq b\\
+            a^T & = a^T(\theta x_1 + (1 - \theta)x_2) \tag{By definition in 2/3}\\
+                             & = \theta a^T x_1 + (1 - \theta) a^T x_2\\
+                             &\leq \theta b + (1 - \theta ) b \tag{Explanation 1} \\
+                             &\leq b
+          \end{align*}
+
+          1) {\small We can put in the inequality, because both are non-negative. At
+          this point, we cannot use 2 anymore, because if we chose any number
+          larger than 1, we would end up with a negative now. Thus, it cannot be
+        affine but is instead convex}
+
+      \end{itemize}
+    }\end{problemAnswer}
+
+  \clearpage
+
+  \vspace{0.2 cm} \textbf{\large Euclidean Ball and Ellipsoids}
+
+  \begin{problemAnswer}{
+      \begin{itemize}
+      \item Euclidean ball: center x$_c$ and radius r:
+        \begin{align*}
+          B(x_c, r) &= \{x | \hspace{0.1 cm} ||x-x_c||_2 \leq r \tag{1}\\
+                    &= \{x_c + ru | \hspace{0.1 cm} ||u||_2 \leq 1\} \tag{2}\\
+        \end{align*}
+
+        1) any point that is within r from the center is contained
+
+        2) any point that is some multiple of the radius, where that multiple is
+        between 0 and 1 is contained
+
+      \item Ellipsoid: set of the form
+
+        \begin{align*}
+          E(x_c, r) &= \{x | (x - x_c)^TP^{-1}(x-x_c) \leq 1\} \tag{1}\\
+                    &= \{x_c + Au | \hspace{0.1 cm} ||u||_2 \leq 1\} \tag{2}\\
+        \end{align*}
+
+        1) P $\in \bm{S}^n_{++}$ i.e P symmetric positive definite
+
+        2) A is square and non-singular, and can be thought of as a
+        transformation on the unit ball, u
+
+        The ellipsoid is a generalization of the Euclidean ball. If P = $r^2$
+        $\bm{I}$, we have that they are equal
+      \end{itemize}
+    }\end{problemAnswer}
+
+
+  \vspace{0.2 cm} \textbf{\large Polyhedra or Polytope}
+
+  \begin{problemAnswer}{
+      \begin{itemize}
+      \item Solution set of finitely many linear inequalities and equalities
+
+        Ax $\prec$ b, Cx = d
+
+        \[\text{Where } A \in \bm{R}^{m x n}, C \in \bm{R}^{p x n}, \text{ and } \prec
+         \text{ is componentwise inequality}\]
+
+      \item Is the intersection of finite number of halfspaces and hyperplanes
+      \end{itemize}
+    }\end{problemAnswer}
+
+
+  \vspace{0.2 cm} \textbf{\large Positive Semidefinite Cone}
+
+  \begin{problemAnswer}{
+      \begin{itemize}
+      \item $\bm{S}^n$ is set of symmetric n x n matrices
+      \item $\bm{S}^n_+$ = \{X $\in \bm{S}^n | X \succeq 0$\}: positive semidefinite n x
+        n matrices
+
+        \[X \in \bm{S}^n_+ \iff z^TXz \geq 0 \forall z\]
+
+        Note, that a linear combination of 
+
+        $\bm{S}^n_+ \text{ is a convex cone} $
+
+      \item $\bm{S}^n_{++}$ = \{X $\in \bm{S}^n | X \succ 0$\}: positive definite n x
+        n matrices
+      \end{itemize}
+    }\end{problemAnswer}
+
+  \clearpage
+
+  {\Large Operations that preserve Convexity}
+  
+
+  \begin{problemAnswer}{
+      \begin{itemize}
+      \item Can always work:
+
+        \[\text{arbitrary } x_1,  x_2 \in \mathcal{C}, 0 \leq \theta \leq  1 \implies \theta x_1 \text{ and } (1 - \theta)x_2 \text{ is in the set }\]
+        
+      \item Show that C is obtained from simple convex sets (hyperplanes,
+        halfspaces, norm balls, ..) by operations that preserve convexity
+        \begin{itemize}
+        \item intersection
+        \item affine functions
+        \item perspective function
+        \item linear-fractional functions
+        \end{itemize}
+      \end{itemize}
+    }\end{problemAnswer}  
+
+  \vspace{0.2 cm} \textbf{\large Preserving Convexity: Intersection}
+  
+  \begin{problemAnswer}{
+      \begin{itemize}
+      \item Intersection of any number of convex functions is convex
+
+        \[\text{eg: } S = \{x \in \bm{R}^m | abs(p(t)) \leq 1 \text{ for } abs(t) \leq
+          \frac{\pi}{3}\}\]
+
+        where p(t) = x$_1$ cos t + x$_2$ cos 2t + ... + x$_m$ cos mt for m = 2
+
+      \item Intuition behind example
+
+         Repheasing S: \[S_t = \{x \in \bm{R}^m | |p(t)| \leq 1\}\]
+         
+         \begin{itemize}
+         \item S$_t$ is a single point. It is the intersection of two parallel
+           halfspaces (which are linear, as they are a linear combination of cos
+           bla) with opposite orientations (
+           hyperslab )
+
+         \item As we modify t, we see that the slab produced by the two parallel lines
+           rotates, and changes width.
+
+         \item Thus, S is the intersection of those slabs.
+           
+         \end{itemize}  
+      \end{itemize}
+    }\end{problemAnswer}  
+
+  \vspace{0.2 cm} \textbf{\large Preserving Convexity: Affine Function}
+  
+  \begin{problemAnswer}{
+      \begin{itemize}
+      \item Suppose f: $\bm{R}^n \to \bm{R}^m$ is affine (f(x) = Ax + b with A $\in
+        \bm{R}^{m x n}, b \in \bm{R}^m$)
+
+        \begin{itemize}
+        \item The image of a convex set under f is convex
+
+          \[S \subseteq \bm{R^n} \text{ convex } \implies f(S) = \{f(x) | x \in S\} \text{
+              convex}\]
+
+        \item The inverse image f$^{-1}$(C) of a convex set under f is convex
+
+          \[C \subseteq \bm{R^m} \text{ convex } \implies f^{-1}(C) = \{x \in \bm{R^n} | f(x) \in C\} \text{ convex}\]
+        \end{itemize}
+
+      \item Examples
+        \begin{itemize}
+        \item scaling, translation, projection
+        \item solution set of linear matrix inequality $\{x | x_1A_1 + ... +
+          x_mA_m \succeq B\}$ with A$_i$, B $\in \bm{S}^P$
+        \item hyperbolic cone $\{x | x^TPx \leq(c^Tx)^2, c^Tx \geq 0\}$ (with P $\in \bm{S}^n_+$)
+
+      \end{itemize}
+      \end{itemize}
+    }\end{problemAnswer}  
+  
+\end{homeworkProblemName}
+
+
+\end{document}

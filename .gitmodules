@@ -1,0 +1,6 @@
+[submodule "MMD"]
+	path = MMD
+	url = https://github.com/IanQS/stanford_data-mining
+[submodule "compilers"]
+	path = compilers
+	url = https://github.com/IanQS/stanford_compilers
