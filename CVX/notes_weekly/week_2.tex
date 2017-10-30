@@ -22,6 +22,7 @@
 \documentclass{article}
 
 \usepackage{pdfpages}
+\usepackage{amssymb}
 \usepackage{fancyhdr} % Required for custom headers
 \usepackage{amsfonts}
 \usepackage{bm}
@@ -376,6 +377,8 @@
       \end{itemize}
     }\end{problemAnswer}
 
+  \clearpage
+
   \vspace{0.2 cm} \textbf{\large Preserving Convexity: Affine Function}
 
   \begin{problemAnswer}{
@@ -391,7 +394,12 @@
 
         \item The inverse image f$^{-1}$(C) of a convex set under f is convex
 
-          \[C \subseteq \bm{R^m} \text{ convex } \implies f^{-1}(C) = \{x \in \bm{R^n} | f(x) \in C\} \text{ convex}\]
+          \[C \subseteq \bm{R^m} \text{ convex } \implies f^{-1}(C) = \{x \in \bm{R^n} |
+            f(x) \in C\} \text{ convex}\]
+
+          This is the case even when the forward function isn't a strict
+          function but more of a relation (many - one). We can still call an
+          inverse on the set
         \end{itemize}
 
       \item Examples
@@ -399,9 +407,206 @@
         \item scaling, translation, projection
         \item solution set of linear matrix inequality $\{x | x_1A_1 + ... +
           x_mA_m \succeq B\}$ with A$_i$, B $\in \bm{S}^P$
-        \item hyperbolic cone $\{x | x^TPx \leq(c^Tx)^2, c^Tx \geq 0\}$ (with P $\in \bm{S}^n_+$)
+
+          This is basically a linear matrix inequality
+        \item hyperbolic cone $\{x | x^TPx \leq(c^Tx)^2, c^Tx \geq 0\}$ (with P $\in
+          \bm{S}^n_+$)
 
       \end{itemize}
+      \end{itemize}
+    }\end{problemAnswer}
+
+  \vspace{0.2 cm} \textbf{\large Preserving Convexity: Perspective and
+    linear-fractional function}
+
+  \begin{problemAnswer}{
+      \begin{itemize}
+      \item perspective function P: $\bm{R}^{n+1} \rightarrow R^n$:
+
+        \[P(x,t) = x/t, \textbf{dom} P = \{(x, t) | t > 0\} \]
+
+        images and inverse images of convex sets under perspective are convex
+
+        \begin{itemize}
+        \item Basically, divide the first n elements of the set by the last
+          element
+        \item perspective function: has the effect of normalizing by the last
+          component
+        \end{itemize}
+
+      \item linear-fractional function: f:$ R^n \rightarrow R^m$:
+
+        \[f(x) = \frac{Ax + b}{c^Tx + d}, \textbf{dom} f = \{x | c^Tx + d >
+          0\}\]
+
+        images and inverse images of convex sets under linear-fractional
+        functions are convex
+
+        Note the following:
+        \begin{itemize}
+        \item If you compose the perspective function with an affine function
+          you get the linear-fractional
+        \item denominator is a scalar
+        \item both numerator and denominator are both affine
+        \item Can be thought of as \"conditioning\" in probability. We're
+          normalizing the computed numerator
+        \end{itemize}
+      \end{itemize}
+
+      The perspective function says that if the object we see in 3d is convex,
+      then the image in 2d is also convex
+    }\end{problemAnswer}
+
+
+  \newpage
+
+  \vspace{0.2 cm} \textbf{{\large Generalized Inequalities}}
+
+  \begin{problemAnswer}{
+      \begin{itemize}
+      \item A Convex cone K $\subseteq \bm{R}^n$ is a \textbf{proper cone} if
+        \begin{itemize}
+        \item K is closed (contains its boundary)
+        \item K is solid (nonempty interior)
+        \item K is pointed (contains no line)
+        \end{itemize}
+
+      \item Examples:
+        \begin{itemize}
+          \item nonnegative orthant K = $\bm{R}^n_+ = \{x \in \bm{R}^n | x_i \geq 0,
+            i = 1, ..., n\}$
+          \item positive semidefinite cone K = $\bm{S}^n_+$
+          \item nonnegative polynonmials on [0, 1]:
+           $$K = \{ x \in \bm{R}^n\ | x_1 + x_2t + x_3t^2 + ... + x_nt^{n - 1} \geq
+           0 \text{ for } t \in [0, 1]$$
+         \end{itemize}
+
+       \item Generalized Inequality defined by a proper cone K:
+
+         $$ x \preceq_K y \iff y - x \in K, x \prec_K y \iff y - x \in \textbf{int} K $$, e.g x $\preceq$
+         y and X $\prec$ Y (for vectors and matrices)
+
+         Note the above describes inequality and strict inequality
+
+         \textbf{Examples}
+         \begin{itemize}
+         \item componentwise inequality (K = $\bm{R}^n_+$)
+
+           $$ x \preceq_{\bm{R}^n_+} y \iff x_i \leq y_i, i= 1,...,n $$
+
+         \item matrix inequality (K = $\bm{S}^n_+$)
+
+           $$ X \preceq_{\bm{S}^n_+} Y \iff Y - X positive semidefinite $$
+
+         \item The above examples are so common that we drop the subscript in $\preceq_K$
+         \end{itemize}
+
+       \item \textbf{Properties}: many properties of $\preceq_K$ are similar to $\leq$ on
+         $\bm{R}$, e.g
+
+         $$ x \preceq_K y, u \preceq_K v \implies x + u \preceq_K y + v $$
+      \end{itemize}
+    }\end{problemAnswer}
+
+
+  \clearpage
+
+  \vspace{0.2 cm} \textbf{{\large Minimum and Minimal Elements}}
+
+  \begin{problemAnswer}{
+      \begin{itemize}
+      \item $\preceq_K$ is not in general a linear ordering: we can have x $\npreceq_K$ y and
+        y $\npreceq_K$ x (can say that they are incomparable: e.g two vectors in
+        $\bm{R}^2$: [2,1] and [1, 2])
+
+      \item When moving from a total ordering into a partial ordering we have
+        interesting things that happen:
+
+      \item x $\in S$ is the \textbf{minimum element} of S wrt $\preceq_K$ IF
+
+        $$ y \in S \implies x \preceq_K y $$
+
+        Means that x is the minimum if 1) comparable to every other element in
+        the set, AND it is smaller than or equal to all of them (and is unique)
+
+      \item x $\in S$ is a \textbf{minimal element} of S wrt $\preceq_K$ IF
+
+        $$ y \in S, y \preceq_K x \implies y = x $$
+
+        If you're in the set and you're comparable to it, then you cannot be
+        less than x without being less than it
+
+      \end{itemize}
+    }\end{problemAnswer}
+
+
+  \vspace{0.2 cm} \textbf{{\large Separating Hyperplane Theorem}}
+
+  \begin{problemAnswer}{
+      \begin{itemize}
+      \item \textbf{Separating hyperplane theorem}
+
+        If C and D are disjoint convex sets, then there exists a $\neq$ 0, b such
+        that
+
+        $$ a^T x \leq b for x \in C, a^T x \geq b for x \in D $$, such that the hyperplane
+        $\{x | a^Tx = b\}$ separates C and D
+
+        strict separation requires additional assumptions (e.g. C is closed and
+        D is a singleton)
+
+      \item \textbf{Supporting Hyperplane Theorem}
+
+        Defn: If C is convex, then $\exists$ supporting hyperplane at every boundary
+        point of C
+
+        supporting hyperplane to set C at boundary point x$_0$:
+
+        $$ \{x | a^Tx = a^Tx_0\} $$ where a$\neq$0 and a$^T$x $\leq$ a$^Tx_0$ for all
+        x $\in$ C
+      \end{itemize}
+    }\end{problemAnswer}
+
+  \clearpage
+
+  \vspace{0.2 cm} \textbf{{\large Dual Cones and generalized inequalities}}
+
+  \begin{problemAnswer}{
+      \begin{itemize}
+      \item \textbf{Dual cone} of a cone K:
+
+        $$ K^* = \{y | y^Tx \geq 0 \forall x \in K\} $$
+
+        Things that make a non-negative inner-product with K. K$^{**}$ == K.
+
+        \begin{itemize}
+        \item K = $\bm{R}_+^n: K^* = \bm{R}_+^n$
+
+          If you draw it out, you find that you get something that is 90$^{\circ}$
+
+          Vector is nonnegative IFF forms nonnegative inner product with all
+          nonnegative vectors
+
+        \item K = $\bm{S}_+^n: K^* = \bm{S}_+^n$
+
+          Basically saying that given some symmetric matrices,  X, Y,
+
+          $$ trace(X, Y) = \sum_{i, j} X_{ij} Y_{ij} == vec(X)^Tvec(Y)$$
+
+          Matrix is PSD IFF its trace against all PSD matrices is nonnegative
+
+        \item K = $\{(x, y) | ||x||_2 \leq t\}: K^* = \{(x, y) | ||x||_2 \leq t\}$
+
+
+        \item K = $\{(x, y) | ||x||_1 \leq t\}: K^* = \{(x, y) | ||x||_{\infty} \leq t\}$
+        \end{itemize}
+
+        \item first 3 examples are \textbf{self-dual} cones
+
+          dual cones of proper cones are proper, hence define generalized
+          inequalities:
+
+          $$ y \succeq_{K^*} 0 \iff y^Tx \geq 0 \forall x \succeq_K 0 $$
       \end{itemize}
     }\end{problemAnswer}
 

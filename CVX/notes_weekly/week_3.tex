@@ -1,0 +1,341 @@
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Structured General Purpose Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when
+% writing assignment content.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{pdfpages}
+\usepackage{amssymb}
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{graphicx} % Required to insert images
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the
+% template
+\usepackage{amsmath}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ (\hmwkTitle)} % Top center header
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Topic \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkClass}{Convex Optimization} % Course/class
+\newcommand{\hmwkTitle}{CVX 101} % Assignment title
+\newcommand{\hmwkClassTime}{-} % Class/lecture time
+\newcommand{\hmwkAuthorName}{Ian Quah (itq)} % Your name
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:}\\
+\textmd{\hmwkTitle}}\\
+\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+% To have just one problem per page, simply put a \clearpage after each problem
+
+\newpage
+\begin{homeworkProblemName}{{\LARGE Week 3: Convex Functions}}
+
+  \vspace{0.2 cm} \textbf{{\large Basic Properties and Examples}}
+
+  \begin{problemAnswer}{
+      \begin{itemize}
+      \item Defn: $f: \bm{R}^n \rightarrow \bm{R}$ is convex if dom f is a convex set, and
+        $$f(\theta x + (1 - \theta)y \leq \theta f(x) + (1 - \theta) f(y)) \text{ } \forall x, y \in \textbf{dom}
+        f, 0 \leq \theta \leq 1 $$
+
+        Aka, if you draw a bowl, with (x, f(x)) on the left side and (y, f(y))
+        on the right side, the line connecting the two (the chord), is such that
+        the chord is above the graph
+
+      \item f is concave if -f is convex
+
+      \item f is strictly convex if \textbf{dom} f is convex and
+
+        $$ f(\theta x + (1 - \theta )y < \theta f(x) + (1 - \theta) f(y)) \text{ for }  x, y \in \textbf{dom}
+        f, x \neq y,  0 < \theta < 1 $$
+
+
+      \item Convex examples on $\bm{R}$
+        \begin{itemize}
+        \item affine: ax + b on $\bm{R} \text{ }\forall a, b \in \bm{R}$
+        \item exponential: $e^{ax}$, for any a $\in \bm{R}$
+        \item powers: $x^{\alpha}$ on $\bm{R}_{++}$, for $\alpha \geq 1 \text{ or } \alpha \leq 0$
+        \item powers of absolute value: $|x|^{p}$ on $\bm{R}$, for $p \geq 1$
+        \item Negative entropy: $x log x$ on $\bm{R}_{++}$
+        \end{itemize}
+
+      \item Concave examples on $\bm{R}$
+        \begin{itemize}
+        \item affine: ax + b on $\bm{R} \forall a, b \in \bm{R}$
+        \item powers: $x^{\alpha}$ on $\bm{R}_{++}$, for $0 \leq \alpha \leq 1$
+        \item logarithm: $log x$ on $\bm{R}_{++}$
+        \end{itemize}
+
+      \item Basically if you plot it you have a non-negative curvature (curves up)
+
+      \item Examples on $\bm{R}^n \text{ and } \bm{R}^{m x n}$
+
+        Affine functions are convex and concave; all norms are convex
+
+        \textbf{Examples on R$^n$}
+
+        \begin{itemize}
+        \item affine function: f(x) = $a^Tx$ + b
+        \item norms: $||x||_p$ = $(\sum_{i=1}^n |x_i|^p)^{\frac{1}{p}}$ for p $\geq$
+          1; $||x||_{\infty} = max_k |x_k|$
+        \end{itemize}
+
+        \textbf{Examples on R$^{m x n}$}
+        \begin{itemize}
+        \item affine function:
+          $$ f(X) = tr(A^TX) + b = \sum_{i=1}^m \sum_{j=1}^n A_{ij}X_{ij} + b $$
+        \item spectral (maximum singular value) norms
+          $$ f(X) = ||X||_2 = \sigma_{\text{max}}(X) = (\lambda_{\text{max}}(X^TX))^{\frac{1}{2}} $$
+        \end{itemize}
+      \end{itemize}
+      }\end{problemAnswer}
+
+    \newpage
+
+    \begin{problemAnswer}{
+        \begin{itemize}
+        \item Convexity checking: restricting the convex function to a line
+          \begin{itemize}
+          \item f: $\bm{R}^n \rightarrow \bm{R} $ is convex iff the fn g: $\bm{R} \rightarrow
+            \bm{R}$
+
+            $$ g(t) = f(x + tv), \textbf{ dom } g = \{t | x + tv \in \textbf{ dom }
+            f\} $$
+
+            \begin{itemize}
+            \item is convex (in t) for any x $\in \textbf{dom } f, v \in \bm{R^n}$
+
+            \item can check convexity of f by checking convexity of functions of one
+            variable
+
+            \item The intuition here is that a function is convex iff when
+              restricted to all lines it is convex
+            \end{itemize}
+
+          \item Example: f: $\bm{S}^n \rightarrow \bm{R} \text{ with } f(X) = log det X,
+            \textbf{ dom } f = \bm{S}^n_{++}$
+
+            \begin{align*}
+              g(t) & = log det(X + tV) \tag{$X + tV = X^{\frac{1}{2}} (I + X^{-\frac{1}{2}} V X^{-\frac{1}{2}}) X^{\frac{1}{2}}$}\\
+                   &= log det X + log det (I + tX^{-\frac{1}{2}}VX^{-\frac{1}{2}}) \tag{log det X constant, $\neg$ interesting}\\
+              &= log det X + \sum_{i=1}^n log(1 + t \lambda_i) \tag{RHS is concave}\\
+            \end{align*}
+
+            where $\lambda_i$ are the eigenvalues of $X^{-\frac{1}{2}}VX^{-\frac{1}{2}}$
+
+            g is concave in t (for any choice of X $\succ$0, V); hence f is concave
+          \end{itemize}
+
+        \item Extended-value extension
+
+          extended-value extension $\tilde{f}$ of f is
+
+          $$ \tilde{f}(x) = f(x), x \in \textbf{ dom } f, \tilde{f}(x) = \infty, x \notin
+          \textbf{ dom } f, $$
+
+          often simplifies notation; e.g
+
+          $$ 0 \leq \theta \leq 1 \rightarrow \tilde{f}(\theta x + (1 - \theta)y) \leq \theta \tilde{f}(x) + (1 - \theta)\tilde{f}(y) $$
+
+          (as an inequality in $\bm{R} \cup \{\infty\}$), means the same as the two conditions
+            \begin{itemize}
+            \item \textbf{dom } f is convex
+            \item for x, y $\in \textbf{ dom }$ f,
+
+              $$ 0 \leq \theta \leq 1 \implies f(\theta x + (1 - \theta)y) \leq \theta f(x) + (1 - \theta)f(y) $$
+            \end{itemize}
+        \end{itemize}
+      }\end{problemAnswer}
+
+    \newpage
+
+    \begin{problemAnswer}{
+
+      Conditions for convexity:
+
+      \textbf{First-Order Condition}
+      \begin{itemize}
+      \item f is differentiable if \textbf{dom} f is open and the gradient
+
+        $$ \nabla f(x) = ( \frac{\partial f(x)}{\partial x_1}, \frac{\partial f(x)}{\partial x_2}, ..., \frac{\partial
+          f(x)}{\partial x_n}) $$, a column vector
+
+        exists at each x $\in \textbf{dom} f$
+
+      \item \textbf{1st-order condition: } differentiable f with convex domain
+        is convex iff
+
+        $$ f(y) \geq f(x) + \nabla f(x)^T(y-x) \forall x, y \in \textbf{ dom } f $$
+
+        RHS: first order taylor expansion of f at the point x
+
+        first-order approximation of f is a global underestimator
+      \end{itemize}
+
+      \textbf{Second-Order Condition}
+      \begin{itemize}
+      \item f is twice differentiable if \textbf{dom} f is open and the Hessian
+        $\nabla^2$f(x) $\in \textbf{S}^n$ gradient
+
+        $$ \nabla^2 f(x)_{ij} = \frac{\partial^2 f(x)}{\partial x_i \partial x_j}, i, j = 1,...,n$$
+
+        exists at each x $\in \textbf{ dom }f$
+
+      \item \textbf{2nd-order condition: } for twice differentiable f with convex domain
+        is convex iff
+
+        \begin{itemize}
+        \item f is convex iff
+
+          $$ \nabla^2 f(x) \succeq 0 \text{ for all x } \in \textbf{ dom } f, \text{the
+            resulting matrix is PSD} $$
+
+        \item if $ \nabla^2 f(x) \succeq 0$ for all x $\in \textbf{ dom } f $, then f is
+          strictly convex
+        \end{itemize}
+
+      \end{itemize}
+
+    }\end{problemAnswer}
+
+
+  \begin{problemAnswer}{
+    Examples
+
+    \begin{itemize}
+    \item quadratic functions: f(x) = $\frac{1}{2}x^TPx + q^Tx + r$ with P $\in
+      \bm{S}^n$
+
+      $$ \nabla f(x) = Px + q, \nabla^2 f(x) = P $$
+
+      convex if P $\succeq$0
+
+    \item Least-squares objective: f(x) = $|| Ax - b||_2^2$
+
+      $$ \nabla f(x) = 2A^T(Ax - b), \nabla^2f(x) = 2A^TA $$
+
+      convex (for any A)
+
+    \item Quadratic-over-linear: f(x, y) = $\frac{x^2}{y}$
+
+      $$ \nabla^2 f(x, y) = \frac{2}{y^3} \begin{bmatrix}y & -x\end{bmatrix}^T \begin{bmatrix}y & -x\end{bmatrix} \succeq 0$$
+
+      convex for y $>$ 0
+
+      if you plot this, you get the lorentz cone
+    \end{itemize}
+
+
+    }\end{problemAnswer}
+
+
+\end{homeworkProblemName}
+
+
+\end{document}
