@@ -1,0 +1,8 @@
+
+notes/notes_3.tex,277
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problemhomeworkProblemName78,2938
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argumenthomeworkSectionName91,3741
+
+notes/auto/notes_1.el,0
+
+notes/auto/notes_2.el,0

@@ -1,0 +1,262 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Structured General Purpose Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when
+% writing assignment content.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{graphicx} % Required to insert images
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the
+% template
+\usepackage{amsmath}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ (\hmwkTitle)} % Top center header
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Topic \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkClass}{Mining Massive Datasets} % Course/class
+\newcommand{\hmwkTitle}{Week 3: Locality-Sensitive Hashing} % Assignment title
+\newcommand{\hmwkClassTime}{-} % Class/lecture time
+\newcommand{\hmwkAuthorName}{Ian Quah (itq)} % Your name
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:}\\
+\textmd{\hmwkTitle}}\\
+\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+% To have just one problem per page, simply put a \clearpage after each problem
+
+\newpage
+\begin{homeworkProblem}{\textbf{Finding Similar Sets}}
+  \begin{enumerate}
+  \item \textbf{Applications: }
+
+  Given a body of docs, find pairs of documents with a lot of text in common
+  \begin{enumerate}
+  \item Mirror Sites, or approximate mirrors: don't want to show both in a
+    search
+  \item Plagiarism, including large quotations
+  \item Similar news sites (cluster articles by ``same story
+    '')
+  \end{enumerate}
+
+
+  \item \textbf{The process:} Shingling $\rightarrow$ Min-hashing $\rightarrow$ Locality-Sensitive hashing
+    \begin{enumerate}
+    \item \textbf{Shingling}: Convert docs, emails, etc. to sets
+    \item \textbf{MinHasing}: convert large sets to short signatures, preserving
+      similarity
+    \item \textbf{Locality-Sensitive Hashing} focus on pairs of signatures likely
+      to be similar
+    \end{enumerate}
+
+
+  \item \textbf{Shingles}
+
+    \problemAnswer{
+      A k-shingle (or k-gram) for a document is a sequence of k chars that appear
+      in the document
+
+      Example: k = 2, doc = abcab, set of 2-shingles = \{ab, bc, ca\}
+    }
+
+    \textbf{Shingles and Similarity}
+    \begin{enumerate}
+    \item Documents that are intuitively similar will have many shingles
+    \item Changing a word only affects k-shingles within dist k from the word
+    \item reordering paragraphs: affects 2k shingles that cross para boundaries
+    \end{enumerate}
+
+    \textbf{Shingles: Compression}
+    \begin{enumerate}
+    \item Compress long shingles (called tokens)
+    \item Represent a doc by the tokens, the set of hash values of its k-shingles
+    \end{enumerate}
+
+\end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\textbf{Min-Hashing}}
+
+  \begin{enumerate}
+  \item   \textbf{Jaccard Similarity}
+    \begin{enumerate}
+    \item   Size of intersection divided by size of the union
+    \item Sim(C$_1$,C$_2$) = $\frac{| C_1 \cap C_2 |}{| C_1 \cup C_2 |}$
+    \end{enumerate}
+
+  \item \textbf{Sets to Boolean Matrices}
+    \begin{enumerate}
+    \item Rows = elems of universal set, e.g: set of all k-shingles
+    \item Col = sets
+    \item 1 in row e and col S iff e is a member of S
+    \item Col similarity is Jaccard of sets of rows with at least 1 in either of
+      the cols' rows
+    \item Typical matrix is sparse
+    \end{enumerate}
+
+  \item \textbf{Consider the following example}
+
+    \begin{tabular}{c|c}
+      C$_1$ & C$_2$\\
+      \hline
+      0 & 1\\
+      1 & 0\\
+      1 & 1\\
+      0 & 0\\
+      1 & 1\\
+      0 & 1
+    \end{tabular}
+
+    - 6 rows, but only 5 of them have at least a single 1 in them. Thus, denominator
+    is 5
+
+    - Sim(C$_1$,C$_2$ ) == 2/5 == 0.4
+
+  \item \textbf{Minhashing}
+
+    \begin{enumerate}
+    \item     Defn: minhash function h(C) = \# of first row in which column C
+      has 1
+    \item     Use several independent hash functions to create signature for
+      each column
+    \item     Signature matrix: alternate repr for signatures - columns == sets and rows
+    == minhash values, in order for that column
+
+    \includegraphics[width=13cm]{minhashing}
+
+  \item \textbf{Algorithm}
+    \begin{enumerate}
+    \item For each hash function
+    \item permute the number of rows and then access the rows in that order
+    \item access the cols (within the row) which have 1's in them and give them
+      the index value (if they haven't been accessed before, else keep the min)
+    \item Continue until we've gotten a hash for all columns
+    \end{enumerate}
+
+  \item  Similarity
+
+    \begin{enumerate}
+    \item Columns and sets: jacard similarity
+    \item Signatures: fraction of components in which the two signatures agree
+    \end{enumerate}
+
+  \item \textbf{Simulating permutations w/o actually permuting}
+
+    \begin{center}
+    \includegraphics[height=5cm]{mh_1}
+
+    \includegraphics[height=5cm]{mh_2}
+
+    \includegraphics[height=5cm]{mh_3}
+  \end{center}
+  \end{enumerate}
+
+\end{enumerate}
+
+\end{homeworkProblem}
+
+\end{document}

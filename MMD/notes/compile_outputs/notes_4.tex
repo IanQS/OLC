@@ -1,0 +1,212 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Structured General Purpose Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when
+% writing assignment content.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+\usepackage{amsfonts}
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{graphicx} % Required to insert images
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the
+% template
+\usepackage{amsmath}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ (\hmwkTitle)} % Top center header
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Topic \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkClass}{Mining Massive Datasets} % Course/class
+\newcommand{\hmwkTitle}{Week 4: Distance Measures} % Assignment title
+\newcommand{\hmwkClassTime}{-} % Class/lecture time
+\newcommand{\hmwkAuthorName}{Ian Quah (itq)} % Your name
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:}\\
+\textmd{\hmwkTitle}}\\
+\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+% To have just one problem per page, simply put a \clearpage after each problem
+
+{\LARGE Note: The notes here are sparse because I know most of the material
+  discussed so definitely go through it on your own}
+
+\newpage
+\begin{homeworkProblem}{\Large \textbf{Distance Measures}}
+
+  \textbf{Distances Measures}
+  \begin{enumerate}
+  \item Generalized LSH is based on notion of distance between points
+  \item Note: Jaccard Similarity is not a true distance, 1 - Jaccard is
+
+  \item \textbf{Axioms of distance functions}
+
+    D is distance function on x,y: D(x,y) if
+
+    \begin{enumerate}
+
+    \item D(x, y) $\geq$ 0
+    \item D(x, y) = 0 iff x == y
+    \item D(x,y) = d(y, x)
+    \item d(x, y) $\leq$ d(x, z) + d(z, y) \hfill The triangle inequality
+    \end{enumerate}
+
+  \item \textbf{Euclidean}
+
+    \begin{enumerate}
+    \item has some number of real-valued dimensions and dense points
+    \item There is a notion of ``average'' of two points - useful for thinking
+      about clusters
+    \item E.g: L$_1$, L$_2$, L$_{\infty}$
+    \end{enumerate}
+
+  \item \textbf{Non-Euclidean}
+    \begin{enumerate}
+    \item Based on properties of points, not location in a space
+    \item If distance measure is not Euclidean, automatically non-Euclidean
+    \item E.g: Jaccard, Cosine, Edit, Hamming Distance
+    \end{enumerate}
+  \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{Nearest Neighbor Learning}}
+
+  \textbf{Instance based learning}
+  \begin{enumerate}
+  \item Run classification again for each new example (unlike other algorithms
+    where we estimate some parameters $\theta$ which we use to speed up
+    classification on new params)
+  \item \textbf{K-nearest Neighbors}
+    \begin{enumerate}
+    \item Works for regression and classification
+    \item Keep whole training dataset
+    \item New query, q comes in
+    \item Find closest examples X
+    \item Predict y$_q$
+    \end{enumerate}
+
+  \item Real world example: Collaborative filtering
+
+  \item \textbf{KNN for large datasets}
+    \begin{enumerate}
+    \item \textbf{Given}: set of point P, s.t each point $\in$ $\mathbb{R}^d$
+    \item \textbf{Goal:} Given a query point q
+    \item \textbf{NN}: Find nearest neighbor p of q in P
+    \item \textbf{Range search} Find one/ all points in P within distance r from
+      q
+
+    \item Two types of queries when dealing with NN
+
+      1) Find K nearest to query point q
+
+      2) Find all points within some distance r to q
+
+      O(n), but with locality sensitive hashing, can be near constant
+    \end{enumerate}
+
+  \end{enumerate}
+
+\end{homeworkProblem}
+
+\end{document}

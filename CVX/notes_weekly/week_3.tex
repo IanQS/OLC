@@ -299,9 +299,7 @@
         \item if $ \nabla^2 f(x) \succeq 0$ for all x $\in \textbf{ dom } f $, then f is
           strictly convex
         \end{itemize}
-
       \end{itemize}
-
     }\end{problemAnswer}
 
 
@@ -328,13 +326,179 @@
 
       convex for y $>$ 0
 
-      if you plot this, you get the lorentz cone
+      \begin{itemize}
+      \item if you plot this and rotate it you get the lorentz cone. It also looks
+      like the front of a ship
+      \item Is rank 1, and this tells us that at any point it is curving in one
+      direction but not in the other.
+      \end{itemize}
+
+    \item log-sum-exp: f(x) = log $\sum_{k=1}^n exp (x_k)$ is convex (This is the
+      softmax function)
+
+      $$ \nabla^2 f(x) = \frac{1}{\textbf{1}^Tz} diag(z) -
+      \frac{zz^T}{(\textbf{1}^Tz)^2}, (z_k = exp x_k) $$
+
+      note: LHS is PSD
+
+      to show $\nabla^2 f(x) \succeq 0, \text{ must verify that } v^T\nabla^2 f(x) v \geq 0 \forall v:$
+
+      $$ \text{ since } (\sum_k v_kz_k)^2 \leq (\sum_k z_kv_k^2)(\sum_kz_k)$$ (from Cauchy-Schwarz inequality)
+
+    \item geometric mean: f(x) = $(\prod_{k=1}^n x_k)^{\frac{1}{n}} \text{ on }
+      \bm{R}_{++}^n$ is concave and follows a similar proof as log-sum-exp
+
+    \item $\alpha$\textbf{-sublevel set} of f: $\bm{R}^n \rightarrow \bm{R}$
+
+      $$ C_{\alpha} = \{x \in \textbf{dom } f | f(x) \leq \alpha\} $$
+
+      sublevel sets of convex functions are convex (converse is false)
+
+    \item Epigraph of f: $\bm{R}^n \rightarrow \bm{R}$
+
+      $$ \textbf{epi } f = \{(x, y) \in \bm{R}^{n + 1} | x \in \textbf{dom } f,
+      f(x) \leq t\} $$
+
+      \begin{itemize}
+      \item function f is convex IFF \textbf{epi} f is a convex set
+      \item Describes the connection between a convex function and a convex set
+      \end{itemize}
     \end{itemize}
-
-
     }\end{problemAnswer}
 
+  \begin{problemAnswer}{
+      \begin{itemize}
+      \item Jensen's inequality
+        \begin{itemize}
+        \item Basic inequality: if f is convex, then for 0 $\leq \theta \leq$ 1,
+          $$ f(\theta x + (1 - \theta)y) \leq \theta f(x) + (1 - \theta) f(y) $$
+        \item Extension: if f is convex, then
 
+          $$ f(\textbf{E}z) \leq \textbf{E} f(z)$$
+
+          for any random variable z
+
+          \item basic inequality is special case with discrete distribution
+
+          prob(z = x) = $\theta$, prob(z = y) = 1 - $\theta$
+        \end{itemize}
+
+      \end{itemize}
+    }\end{problemAnswer}
+
+  \newpage
+
+  \vspace{0.2 cm} \textbf{{\large Operations that preserve Convexity}}
+
+  \begin{problemAnswer}{
+
+    Practical methods for establishing convexity
+
+    \begin{itemize}
+    \item verify defn': often simplified by restricting to a line
+    \item for twice differentiable functions, show $\nabla^2$f(x) $\succeq$ 0
+    \item Show that f is obtained from simple convex fns' by operations that
+      themselves preserve convexity
+
+      \begin{itemize}
+
+        \item 1) non-negative weighted sum, and composition with affine
+        functions
+        \begin{itemize}
+
+        \item nonnegative multiple: $\alpha$f is convex if f is convex, $\alpha$ $\geq$0
+
+        \item sum: f$_1$ + f$_2$ convex, if f$_1$ and f$_2$ convex (extends to
+          infinite sums, integrals)
+
+        \item  f(Ax + b) is convex if f is convex
+
+        \item log barrier for linear inequalities:
+
+          $$ f(x) = - \sum_{i=1}^m log(b_i - a_i^Tx), \textbf{ dom } f = \{x | a_i^Tx
+          < b_i, i=1,...,m\}$$
+
+        \item (any) norm of affine function: f(x) = $|| Ax + b|| $
+        \end{itemize}
+
+      \item 2) Pointwise Max
+
+        \begin{itemize}
+        \item  if f$_1$,...,f$_m$ are convex, then f(x) = max(f$_1$(x), ..., f$_m$(x)) is
+          convex
+
+          $$ \text{Intuition: draw multiple bowls and take the intersection} $$
+
+        \item piecewise-linear function: f(x) = max$_{i=1,...,m}$(a$_i^T$x +
+          b$_i$) is convex
+        \item sum of r largest components of x $\in$ $\bm{R}^n$:
+
+          $$ f(x) = x_{[1]} + x_{[2]} + ... + x_{[r]}$$
+
+          is convex ($x_{[1]}$ is the ith largest component of x)
+
+          proof:
+
+          $$ f(x) = max\{x_{i1} + x_{i2} + ... + x_{ir} | 1 \leq i_1 < i_2 < ... <
+          i_r \leq n \}$$
+        \end{itemize}
+
+      \item 3) Pointwise supremum
+
+        \begin{itemize}
+        \item if f(x,y) is convex in x for each y $\in$ $\mathcal{A}$, then
+          $$ g(x) = sup_{y \in \mathcal{A}} f(x,y) $$
+
+          is convex
+
+        \item examples
+
+          \begin{itemize}
+            \item support function of a set C: S$_c$(x) = sup$_{y \in C} y^Tx$ is
+              convex
+
+              y$^T$x is linear, and the supremum of a set of functions is itself convex
+            \item distance to farthest point in a set C:
+              $$ f(x) = sup_{y \in C} || x - y || $$
+            \item max eigenvalue of symmetric matrix:for X $\in \bm{S}^n$,
+
+              $$ \lambda_{max}(X) = sup_{||y||_2 = 1} y^TXy $$
+          \end{itemize}
+        \end{itemize}
+      \end{itemize}
+    \end{itemize}
+  }\end{problemAnswer}
+
+\newpage
+
+\begin{problemAnswer}{
+
+    Practical methods for establishing convexity
+
+    \begin{itemize}
+    \item Show that f is obtained from simple convex fns' by operations that
+      themselves preserve convexity
+
+      \begin{itemize}
+      \item 4) Composition with scalar functions
+        \begin{itemize}
+        \item Composition of g: $\bm{R}^n \rightarrow \bm{R}$ and $h: \bm{R} \rightarrow \bm{R}$
+
+          $$ f(x) = h(g(x))$$
+
+          \[ \text{f is convex if } \begin{cases}
+             \text{g convex, h convex, $\tilde{h}$ nondecreasing } \\
+             \text{g concave, h convex, $\tilde{h}$ nonincreasing }
+            \end{cases}
+          \]
+
+        \item proof
+
+        \end{itemize}
+      \end{itemize}
+    \end{itemize}
+
+}\end{problemAnswer}
 \end{homeworkProblemName}
 
 

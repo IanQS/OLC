@@ -1,0 +1,318 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Structured General Purpose Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when
+% writing assignment content.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{graphicx} % Required to insert images
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the
+% template
+\usepackage{amsmath}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ (\hmwkTitle)} % Top center header
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Topic \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkClass}{Mining Massive Datasets} % Course/class
+\newcommand{\hmwkTitle}{Week 2: PageRank} % Assignment title
+\newcommand{\hmwkClassTime}{-} % Class/lecture time
+\newcommand{\hmwkAuthorName}{Ian Quah (itq)} % Your name
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:}\\
+\textmd{\hmwkTitle}}\\
+\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+% To have just one problem per page, simply put a \clearpage after each problem
+
+\newpage
+\begin{homeworkProblem}{\textbf{Link Analysis and PageRank}}
+
+  \problemAnswer{
+  Web as a graph:
+  \begin{enumerate}
+  \item nodes: webpage
+  \item edge: hyperlink
+  \end{enumerate}
+
+  Link Analysis Approach:
+  \begin{enumerate}
+    \item Page Rank - Google
+    \item Hubs and Authorities
+    \item Topic-Specific Page Rank
+    \item Web Spam Detection Algorithms
+  \end{enumerate}
+}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\textbf{PageRank: Flow Formulation}}
+
+  \problemAnswer{
+    \begin{enumerate}
+    \item     Let r$_j$ be the rank of website j (normalized to 1)
+    \item     Flow Algorithm: r$_j$ = $\sum_{i \rightarrow j} \frac{r_i}{|D|}$, where $|D|$ is num of
+      nodes pointing to j
+    \item Vote from important page is worth more
+    \item  However, when there are a lot of pages, this computation becomes expensive, so
+  we need to reformulate it.
+    \end{enumerate}
+}
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}{\textbf{PageRank: Matrix}}
+
+  \problemAnswer{
+    \begin{enumerate}
+    \item r$_j$ = $\sum_{i \rightarrow j} \frac{r_i}{|D|}$ $\rightarrow$ r = M $\cdot$ r
+    \item If we constrain the sum of the outnodes to 1, then the matrix is
+      called Column Stochastic
+    \item Largest Eigenvalue of M is 1, since M is column stochastic
+
+      A x = $\lambda $x
+
+    \item We can now efficiently solve for r using Power Iteration
+    \end{enumerate}
+}
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}{\textbf{PageRank: Power Iteration}}
+
+  \problemAnswer{
+
+    Power Iteration: iterative scheme
+
+    \begin{enumerate}
+    \item     Given web graph with N nodes.
+    \begin{enumerate}
+    \item N web pages
+    \item \textbf{Initialize}: r$^{(0)}$ = [1/N, ...., 1/N]$^T$
+    \item \textbf{Iterate}: r$^{(t+1)}$ = M $\cdot$ r$^t$
+    \item \textbf{Halting condition}: $|$ r$^{(t+1)}$ - r$^t$ $|$ $<$ $\epsilon$, here
+      using L$_1$ norm but can use any other norm
+    \end{enumerate}
+    \item Intuition: keep multiplying it until it converges (reaches stationary state)
+    \end{enumerate}
+
+
+    Formulation as a random walk
+    \begin{enumerate}
+    \item At time t, random walker is on page i
+    \item At t + 1, walker randomly picks a page out (out-link)
+    \item Ends up on some page j from i (M$_{ji}$)
+    \item Repeats indefinitely
+    \end{enumerate}
+
+    Since the out-links are normalized, this is a probability distribution
+
+}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\textbf{Google formulation of Page Rank}}
+
+  \vspace{0.5 cm}
+
+  \textbf{Page rank: 3 Questions}
+  \begin{enumerate}
+  \item Does the result converge? \hfill Not necessarily
+  \item Does it converge to what we want? \hfill Not always
+  \item Are the results reasonable? \hfill Not always
+  \end{enumerate}
+
+  \textbf{Google's Solutions}
+  \begin{enumerate}
+  \item Spider Traps: random surfers teleporting out with probability $\beta$
+  \item Dead Ends: random surfer teleports out with probability 1, to another
+    node (uniformly)
+  \end{enumerate}
+
+  \textbf{Why do random surfers solve our problem?}
+
+  \begin{enumerate}
+  \item It makes our transition matrix, M, stochastic
+
+    Because what ends up happening is that because there is some chance that it
+    can teleport to any page (uniformly), it becomes a dense graph, and because
+    it can do it with equal probability, this does not actually change the
+    probabilities beyond just making sure that our matrix in the limit does not
+    become 0 or 1 (caught in spider trap)
+
+  \item Makes M aperiodic
+    \begin{enumerate}
+    \item \textbf{Def}
+      A chain is aperiodic if there exists k $>$ 1 s.t interval between two
+      visits to some state S is always a multiple of k
+    \end{enumerate}
+  \item Makes M irreducible
+    \begin{enumerate}
+    \item \textbf{Def}
+      Non-0 probability of transitioning out of any node
+    \end{enumerate}
+  \end{enumerate}
+
+  \textbf{The Google Matrix}
+
+  \problemAnswer{
+
+  \textbf{New form of our PageRank equation}
+
+  \[r_j = \Sigma_{i \rightarrow j} \beta\frac{r_i}{d_i} + (1 - \beta)\frac{1}{n} \]
+
+  \textbf{Google Matrix A, modifying M}
+
+  \[ A = \beta M + (1 - \beta)\frac{1}{n}\emph{e}\cdot\emph{e}\] \hfill where e is vector of
+  1's
+
+  We know that A is stochastic, aperiodic and irreducible some
+
+  \[r^{t + 1} = A \cdot r^{(t)}\]
+
+  in practice, $\beta$ is typically 0.8 or 0.9, so our surfer makes about 5 steps
+  and then jumps
+
+}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\textbf{Computing PageRank for web-scale}}
+
+  \textbf{Matrix A vs M}
+
+  We would prefer to work with matrix M rather than matrix A just because M is
+  full of 0's which is cheap to store, rather than matrix A which is dense
+
+  \textbf{Investigating the matrix}
+
+  \problemAnswer{
+    \begin{align*}
+      \text{Recall: r} &= A\cdot r \text{ where } A_{ij} = \beta M_{ij} + \frac{1 - \beta}{N}\\
+      r_i &= \Sigma_{j=1}^N A_{ij} \cdot r_j\\
+      r_i &= \Sigma_{j=1}^N [\beta M_{ij} + \frac{1 - \beta}{N}] \cdot r_j \tag{Substitute in A}\\
+      r_i &= \Sigma_{j=1}^N \beta M_{ij}  r_j + \Sigma_{j=1}^N \frac{1 - \beta}{N} \cdot r_j \tag{Distribute the sums}\\
+      &= \Sigma_{j=1}^N \beta M_{ij}  r_j +\frac{1 - \beta}{N} \tag{bc sum of r$_j$ = 1}\\
+      r &= \beta M \cdot r + [\frac{1 - \beta}{N}]_N \\
+    \end{align*}
+    $[\frac{1 - \beta}{N}]_N $ is a vector of length N, where all elems have value $\frac{1 - \beta}{N}$
+  }
+
+  \textbf{Full Page Rank Algorithm}
+
+  \includegraphics[width=13cm]{e_1}
+
+
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}{\textbf{Assignment 2 hints}}
+
+  My personal hints are to just use the matrix form of the equation rather than
+  implementing the iterative method. Both lead to the same answer, and the
+  matrix form is much cleaner.
+
+\end{homeworkProblem}
+
+\end{document}

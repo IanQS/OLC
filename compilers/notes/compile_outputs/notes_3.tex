@@ -1,0 +1,551 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Structured General Purpose Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when
+% writing assignment content.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{graphicx} % Required to insert images
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the
+\usepackage{ textcomp }
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+% template
+
+\usepackage{amsmath}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ (\hmwkTitle)} % Top center header
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Topic \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkClass}{Compilers} % Course/class
+\newcommand{\hmwkTitle}{Week 3 - Parsing and Top-Down parsing} % Assignment title
+\newcommand{\hmwkClassTime}{-} % Class/lecture time
+\newcommand{\hmwkAuthorName}{Ian Quah (itq)} % Your name
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+\newpage
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+% To have just one problem per page, simply put a \clearpage after each problem
+
+\begin{homeworkProblem}{\Large \textbf{Parsing - Introduction}}
+
+  \problemAnswer{
+
+    \textbf{Regular Languages}
+    \begin{enumerate}
+    \item Weakest formal languages - most languages aren't regular
+
+      \{($^i)^i$ $|$ i $\geq$ 0 \}, the set of all balanced parens, which can't be
+      represented as a regular language
+
+    \item What \textbf{CAN} a regular language express?
+      \begin{enumerate}
+      \item count mod k
+
+        can't calculate to some arbitrarily high value, like in balanced parens problem
+      \end{enumerate}
+
+    \item
+      \begin{tabular}{c| c| c}
+        Phase & Input & Output\\
+        \hline
+        Lexer & String of Chars & String of Tokens\\
+        Parser & String of tokens (output of lexer) & Parse Tree\\
+      \end{tabular}
+  \end{enumerate}
+}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{Context Free Grammars}}
+
+  \begin{enumerate}
+  \item \textbf{The Problem}
+
+    \begin{enumerate}
+    \item Not all strings of tokens are programs
+
+      Thus, need a language for describing valid strings of tokens and method to
+      distinguish invalid and valid strings of tokens
+
+      Note:
+      RegExp $\subset$ CFG
+
+      A regular language can be recognized by a finite automaton. A context-free language requires a stack
+
+    \item Programming Languages have a recursive structure, and CFGs are a
+      natural notation for describing these structures.
+    \end{enumerate}
+
+  \item \textbf{What IS a CFG?}
+
+    \begin{enumerate}
+    \item A set of terminals, T
+    \item A set of non-terminals, N
+    \item A start symbol, S (S $\in$ N)
+    \item A set of productions: (A symbol, followed by an arrow then a list of symbols)
+
+      X $\rightarrow$ Y$_1$, ... Y$_n$
+
+      X $\in$ N and $Y_i \in N \cup T \cup \{\epsilon\}$
+    \end{enumerate}
+
+  \item \textbf{CFG example: Balanced Parens Problem}
+
+    \textbf{Productions / Rules}
+
+    \problemAnswer{
+      S $\rightarrow$ (S) \hfill S, our start state then becomes another state with two
+      parens around it
+
+      S $\rightarrow$ $\epsilon$
+    }
+
+    \textbf{Our States}
+
+    N = \{S\}
+
+    T = \{(, )\}
+
+    S = start symbol \hfill in general the first production will specify the
+    start symbol for that CFG
+
+  \item \textbf{Productions as rules:}
+
+    \begin{enumerate}
+    \item Begin with a String that only has start symbol, S
+    \item Replace any non-terminal X in start by RHS of some production
+    \item Repeat (2) until there are no non-terminals
+    \end{enumerate}
+
+    If we consider a single step as $\alpha$, then a program can be thought of as
+
+    $\alpha_0$ $\rightarrow$ $\alpha_1$ $\rightarrow$ ... $\rightarrow$ $\alpha_n$ \hfill equiv $\alpha_0$ $\rightarrow^*$ $\alpha_n$
+
+
+  \item \textbf{CFG formal definition}
+
+    Let G be a CFG with start symbol S, then L(G) of G is:
+
+    \[\{ a_1,...,a_n | \forall i , a_i \in T, S\rightarrow^* a_1,...,a_n \}\]
+
+
+  \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{Derivations Part 1}}
+  \begin{enumerate}
+  \item \textbf{Derivation:} a sequence of productions
+  \item \textbf{Representations}
+
+    - A derivation can be drawn as a tree instead of a linear path
+
+    - A derivation can be drawn as a tree
+
+    \begin{enumerate}
+    \item Start symbol is the root
+    \item For a production, add the children
+    \end{enumerate}
+
+
+    \textbf{Example: }
+
+    Grammar:  E $\rightarrow$ E + E $|$ E * E $|$ (E) $|$ id
+
+    \includegraphics[width=13cm]{derivation_tree}
+
+    LHS: Derivation intermediates (Left-most derivation)
+
+    RHS: Parse tree of input string
+
+  \item \textbf{Parse Trees}
+    \begin{enumerate}
+    \item Terminals at the leaves
+    \item Non-terminals at interiors
+    \item in-order traversal of tree is original input
+    \item Parse tree shows association of operations, input string does not (in
+      tree we see multiplication is more tight than addition)
+    \item Left-most and right-most derivation produces same parse tree, but the
+      main difference is the intermediate step
+    \end{enumerate}
+
+  \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{Ambiguity in CFGs}}
+
+  \begin{enumerate}
+  \item \textbf{Ambiguity}: if there is more than one parse tree for some string
+    (more than 1 left-most or right-most derivation)
+
+    This is bad, because it means that the decision is left to the compiler
+
+  \item Determining if it's ambiguous
+
+    Construct a string, then work backwards and see if there is more than 1 way
+    to get the tree
+
+  \item \textbf{Removing ambiguity}
+
+    id * id + id
+
+    E $\rightarrow$ E' + E | E'
+
+    E' $\rightarrow$ id * E' | id | (E) * E' | (E)
+
+    rewrite to enforce precedence of * over +, by separating multiplication and
+    + s.t * is handled by E'
+  \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{Error Handling}}
+
+  \textbf{Requirements of a Compiler}
+  \begin{enumerate}
+  \item Report errors accurately
+  \item Not slow down compilation of valid code
+  \end{enumerate}
+
+  \textbf{Error Handling methods}
+  \begin{enumerate}
+  \item Panic Mode
+    \begin{enumerate}
+    \item Simplest, most popular
+    \item When an error is detected:
+
+      High-level Algorithm
+      \begin{enumerate}
+      \item Discated tokens until one with a clear role is found
+      \item continue from there
+      \end{enumerate}
+
+    \item Details
+      \begin{enumerate}
+      \item Looks for syncrhonizing tokens
+      \item typically statement or expression terminators
+      \end{enumerate}
+    \end{enumerate}
+
+  \item Error productions
+    \begin{enumerate}
+    \item Specify known common mistakes in the grammar
+    \item E.g :
+
+      Write 5x instead of 5 * x
+
+      Add the production E $\rightarrow$ ... $|$ E E \hfill which makes it now well-formed
+
+    \end{enumerate}
+
+  \item Automatic Error correction
+
+    Idea: find some correct ``nearby'' program
+    \begin{enumerate}
+    \item Try token insertion and deletion
+    \item Or do an exhaustive search
+    \end{enumerate}
+
+    Disadvantages
+    \begin{enumerate}
+    \item Hard to implement
+    \item Storage of all the state is expensive
+    \item Final output is not necessarily what the programmer intended. Safer to
+      just error out
+    \end{enumerate}
+  \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{Abstract Syntax Trees}}
+
+  \textbf{Why not use the Parse Tree}
+  \begin{enumerate}
+  \item Contains a lot of redundant information.
+  \end{enumerate}
+
+  \begin{tabular}{c| c}
+    \includegraphics[width=6cm]{ast} &  \includegraphics[width=6cm]{parse_tree}\\
+  \end{tabular}
+
+  See that in the parent of root nodes in parse tree, might as well just store
+  the values themselves there, and that the parens were important in parsing but
+  now they're not as important
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}{\Large \textbf{Recursive Descent}}
+
+  \textbf{Top-Down Construction}
+  \begin{enumerate}
+  \item From the top
+  \item From Left to Right
+  \end{enumerate}
+
+  Work our way down the productions, trying to match from the most general to
+  most specific, then if it doesn't match at the root, we do backtracking up
+  until the most general again
+
+  \vspace{0.5 cm}
+
+  {\Large \textbf{Recursive Descent Algorithm}}
+
+  \begin{enumerate}
+  \item A given token terminal
+
+    bool term (TOKEN tok) \{return *next++==tok;\}
+
+  \item The nth production of S:
+
+    bool S$_n$() \{...\}
+
+  \item Try all productions of S:
+
+    bool S() \{...\}
+  \end{enumerate}
+
+
+  \problemAnswer{
+
+    Example case:
+
+    \begin{enumerate}
+    \item     For production E $\rightarrow$ TOKEN
+
+      bool E$_1$()\{return T();\}
+
+    \item     For production E $\rightarrow$ T + E
+
+      bool E$_2$\{return T() \&\& term(PLUS) \&\& E();\}
+
+    \item For all productions of E(with backtracking)
+
+      bool E()\{
+      TOKEN *save = next;
+      return (next =save, E$_1$()) $||$ (next=save, E$_2$();)
+      \}
+
+
+    \item Functions for non-terminal T
+
+      bool T$_1$()\{return term(INT);\} \hfill T $\rightarrow$ int
+
+      bool T$_2$() \{return term(INT) \&\& term(TIMES) \&\& T();\} \hfill
+      T$\rightarrow$int * T
+
+      bool T$_3$()\{return term(OPEN) \&\& E() \&\& term(CLOSE); \} \hfill T $\rightarrow$ (E)
+
+      bool T()\{ TOKEN *save = next; return (T$_1$()) $||$ T$_2$() $||$ T$_3$); \}
+
+    \end{enumerate}
+}
+    {\Large \textbf{Limitations of RDA}}
+
+    \begin{enumerate}
+    \item There is no backtracking for a production meaning even though we may have
+      succeeded in matching a rule, we may not consume all the strings.
+    \item Sufficient for grammars where for any non-terminal at most one
+      production can succeed then.
+    \item Thus, we need to introduce another method.
+    \item * The method we were given earlier was given because it's mechanical
+      and easy to do by hand.
+    \end{enumerate}
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{Left Recursion}}
+
+  \textbf{Addresses the issues we brought up in the previous video}
+
+  \begin{enumerate}
+  \item  Consider the production S $\rightarrow$ S a
+    \begin{enumerate}
+    \item bool S$_1$() \{ return S() \&\& term(a);\}
+    \item bool S() \{return S$_1$();\}
+    \item S() goes into an infinite loop
+    \end{enumerate}
+
+  \item This is called a left-recursive grammar: it has a non-terminal S
+
+    S $\rightarrow^+$ S $\alpha$ for some $\alpha$
+
+
+  \item \textbf{Consider a more general production} S $\rightarrow$ S $\alpha$ $|$ $\beta$
+
+    S generates all strings starting with a $\beta$ and followed by any number of
+    $\alpha$
+
+    S generates all strings starting with a $\beta$ followed by any number of $\alpha$s
+
+  \item \textbf{The solution: rewriting using right-recursion}
+
+    S $\rightarrow$ $\beta$ S'
+
+    S' $\rightarrow$ $\alpha$ S' $|$ $\epsilon$
+
+  \item \textbf{General form}
+
+    \begin{enumerate}
+    \item In General
+
+      S $\rightarrow$ S $\alpha_1$ $|$ ... $|$ S $\alpha_n$ $|$ $\beta$ $|$... $\beta_m$
+
+    \item All strings derived from S start with one of $\beta_1, ... \beta_m$ and
+      continue with several instances of $\alpha_1, ... , \alpha_n$
+
+    \item Rewrite as
+
+      S $\rightarrow$ $\beta_1$ S' $|$ ... $|$ $\beta_m$ S'
+
+      S' $\rightarrow$ $\alpha_1$S' $|$ ... $|$ $\alpha_n$ S' $|$ $\epsilon$
+    \end{enumerate}
+  \end{enumerate}
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}{\Large \textbf{Quiz hints}}
+
+  \begin{enumerate}
+  \item Expand the production rules, then think of binary
+  \item Build off the previous one, then consider the number of times you can
+    add epsilon as well as the number of unique strings it will generate
+  \item Think of whether it would be possible to write a RegExp that would
+    accept a string generated by the grammar
+    \begin{enumerate}
+    \item The answer was discussed in a video
+    \item Construct a regexp
+    \item My advice here is to start from the simplest case, then work your way
+      backwards (I.e consider D, then C from D and so forth)
+
+    \end{enumerate}
+  \item unfortunately here there is no good trick that I know of. You need to
+    substitute in all the values and see if it generates something
+    left-recursive
+  \item Substitutions
+  \item Throw all you know about order of operations out and build different
+    trees from there (the parenthesis rule still holds though). Write down the
+    different configurations you generated - will be useful for next question
+  \item Review the definition of
+    \href{https://en.wikipedia.org/wiki/Operator_associativity}{associates
+      left}, then consider each case given.
+  \item -
+  \item -
+  \item Write out all the possible strings, then for each string identify the
+    number of trees that can generate each of them
+  \item I think of ambiguous as not being able to determine the order again, but
+    if you keep the same ordering (hint hint), and the rules are uniform then
+    you can generate the original (I \textit{think})
+  \item Think of short circuiting, and review the RD algorithm thoroughly.
+\end{enumerate}
+
+\end{homeworkProblem}
+
+\end{document}

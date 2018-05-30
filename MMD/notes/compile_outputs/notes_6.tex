@@ -1,0 +1,674 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Structured General Purpose Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when
+% writing assignment content.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{graphicx} % Required to insert images
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the
+% template
+\usepackage{amsmath}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ (\hmwkTitle)} % Top center header
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Topic \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkClass}{Mining Massive Datasets} % Course/class
+\newcommand{\hmwkTitle}{Week 6: Communities in Social Networks} % Assignment title
+\newcommand{\hmwkClassTime}{-} % Class/lecture time
+\newcommand{\hmwkAuthorName}{Ian Quah (itq)} % Your name
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:}\\
+\textmd{\hmwkTitle}}\\
+\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+% To have just one problem per page, simply put a \clearpage after each problem
+
+\newpage
+\begin{homeworkProblem}{\Large \textbf{Community Detection in Graphs}}
+
+  None
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{Affiliation Graph Model}}
+
+  \begin{enumerate}
+  \item \textbf{Plan}
+
+    \begin{enumerate}
+    \item Given a model, generate a network
+    \item Given a network, find the ``best'' model
+    \end{enumerate}
+
+  \item \textbf{Model of Networks}
+
+    \begin{enumerate}
+    \item Goal: Define a model that can generate networks
+
+      Model will have a set of ``parameters'' that will later want to estimate
+      (and detect communities)
+
+    \item Solution: Community-Affiliation Graph
+
+      \begin{enumerate}
+      \item A generative model B(V, C, M, \{p$_c$\}) for graphs:
+        \begin{enumerate}
+        \item Nodes, V
+        \item Communities, C
+        \item Memberships, M
+        \item Each community c has a single probability p$_c$
+        \item Later, we fit model to networks to detect communities
+        \end{enumerate}
+
+      \item \textbf{AGM generates Links for each pair of nodes}
+        \begin{enumerate}
+        \item For each pair of nodes in community A, connect them with prob
+          p$_A$
+
+        \item The overall edge probability is:
+
+          \[P(u,v) = 1 - \prod_{c \in M_u \cap M_v}(1 - p_c)\]
+
+          where
+
+          $\cdot$ M$_u$ is the set of communities node u belongs to
+
+          $\cdot$ If u, v share no communities: P(u, v) = $\epsilon$
+
+          $\cdot$ ``OR'' function: if at least 1 community says yes, create an edge
+
+          \textbf{Intuition}
+
+          (1 - p$_c$) is the prob that both of them do not connect
+
+          $\prod$ is essentially saying all communities are voting ``no'', there is
+          no connection
+
+        \end{enumerate}
+
+
+      \item \textbf{AGM characteristics}
+        \begin{enumerate}
+        \item Can express: non-overlapping, overlapping, nested
+        \end{enumerate}
+      \end{enumerate}
+
+    \end{enumerate}
+  \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large AGM $\rightarrow$ BIGCLAM}
+
+  Main idea: AGM is restrictive: it models a ``Yes-No'' relationship
+
+  Relaxation: Memberships have strengths
+
+  \begin{enumerate}
+  \item   F$_{UA}$: The membership strength of node u to community A (F$_{uA}$ = 0: no
+    membership)
+
+  \item \textbf{Probability of two nodes belonging to the same community}
+
+    Each community A links nodes independently:
+
+    P$_A$(u, v) = 1 - exp(-F$_{uA}$ $\cdot$ F$_{vA}$)
+
+  \item \textbf{Membership across multiple groups}
+
+    Matrix F describes our membership matrix
+
+    - single col describes the strength of a single entity belonging in some community
+
+    - single row describes the membership of all nodes in that single community
+
+    Prob. that at least one common community C links the nodes:
+
+    \[P(u,v) = 1 - \prod_{C}(1 - P_C(u, v))\]
+
+  \item \textbf{AGM $\rightarrow$ BIGCLAM}
+
+    Take Equation from (2) and equation from (3)
+
+    \begin{align*}
+      P _A (u, v) &= 1 - exp(-F _{uA}   \cdot  F _{vA} ) \tag{Equation from 2}\\
+      P(u, v) &= 1 - \prod_C(1 - P_C(u, v)) \tag{General form of equation from 2}\\
+                  & = 1 - exp(-\sum_C F_{uC} F_{vC} )\\
+                  & =1 - exp(-F_u \cdot F_v^T) \\
+    \end{align*}
+  \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{Solving the BIGCLAM}}
+
+  \begin{enumerate}
+  \item   \textbf{Problem}: Now we need to estimate F, the community affiliation matrix.
+
+    \textbf{Solution}:  Find F that maximizes the likelihood
+
+    \[argmax_F \prod_{(u,v) \in E} p(u, v) \prod_{(u,v) \notin E} (1 - p(u, v))\]
+
+    where p(u, v) = 1 - exp(-$F_u \cdot F_v^T$)
+
+    If we work with the log-likelihood instead, then we obtain:
+
+    \[l(F) = \sum_{(u,v) \in E} log(1 - exp(-F_u \cdot F_v^T)) -  \sum_{(u, v) \notin E} F_u
+      F_v^T\]
+
+  \item     \textbf{New Problem}: How do we run the optimization?
+
+    \textbf{Solution}: Gradient Descent, which leaves us with the following equation
+
+    \[\nabla l(F_u) = \sum_{v \in \mathcal{N}(u)} F_v \frac{exp(-F_uF_v^T)}{1 -
+        exp(-F_uF_v^T)} - \sum_{v \notin \mathcal(u)}F_v\]
+
+    where $\mathcal{N}(u)$ is the set of outgoing neighbors for u
+
+    \textbf{Coordinate gradient ascent}
+    \begin{enumerate}
+    \item Iterate over rows of F
+    \item Compute gradient $\nabla$l(F$_u$) of row u while keeping others fixed
+    \item Update row F$_u$: F$_u$ $\leftarrow$ F$_u$ + $\eta$$\nabla$l(F$_u$)
+    \item Project F$_u$ back to a non-negative vector: If F$_{uC}$ $<$ 0:
+      F$_{uC}$ = 0
+    \end{enumerate}
+
+    But, this is slow because it is linear: we need to iterate through all the
+    data because of the summations
+
+  \item \textbf{BigCLAM: 2.0: }
+
+    Notice: $\sum_{v \notin \mathcal{N}(u)} F_v = (\sum F_v - F_u - \sum_{v \in \mathcal{N}(u)}
+    F_v)$
+
+    \begin{enumerate}
+    \item We can cache $\sum_v$ F$_v$
+      
+      Thus, computing $\sum_{v \notin \mathcal{N}(u)} F_v$ now takes linear time in the
+      degree of $|\mathcal{N}(u)|$ of u (instead of linear in the data)
+
+      In networks degree of a node is much smaller to the total number of nodes
+      in the network, so this is a significant speedup
+    \end{enumerate}
+    
+  \end{enumerate}
+\end{homeworkProblem}
+
+{\LARGE Note, the next few topics were marked as advanced}
+
+\begin{homeworkProblem}{\Large \textbf{Detecting Communities as Clusters}}
+
+  None
+  
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{What makes a Good cluster?}}
+
+  \begin{enumerate}
+  \item Given an undirected graph, G(V,E)
+  \item \textbf{Partitioning Task}
+
+    Divide vertices into 2 disjoint groups, A and B such that  A = V$\setminus$B and B = V$\setminus$A
+
+  \item \textbf{But how do we define a ``Good'' cluster in G?}
+
+    \textbf{Evaluation Metrics}
+    \begin{enumerate}
+    \item Maximize number of within-cluster connections
+    \item Minimize number of between cluster connections
+    \end{enumerate}
+
+    \textbf{Graph Cuts} a characterization of minimization of between cluster connections
+    \begin{enumerate}
+    \item Express cluster quality as a function of the ``edge cut'' of the
+      cluster
+    \item Cut: Set of edges with only 1 node in the cluster
+
+      \[cut(A) = \sum_{i \in A, j \notin A} W_{ij}\]
+
+      which works for weighted and unweighted graphs
+
+    \item Can be thought of as number of outgoing edges from the cluster
+
+    \item \textbf{Problem: }
+      \begin{enumerate}
+      \item       Degenerate cases: doesn't always do what we want.
+      \item Only considers external cluster connections
+      \item Does not consider internal cluster connectivity
+      \end{enumerate}
+    \end{enumerate}
+    \textbf{Conductance}
+    \begin{enumerate}
+    \item Conductance: connectivity of group to rest of network relative to
+      density of group, $\phi$
+
+      \[\phi(A) = \frac{|\{(i, j) \in E; i \in A, j \notin A\}|}{min(vol(A), 2m - vol(A))}\]
+
+      \textbf{Numerator}: the cut
+
+      \textbf{Denominator}:  total weight of edges with at least one endpoint in A:
+      
+      \[ vol(A) = \sum_{i \in A} d_i\]
+
+    \item Produces balanced clusters
+    \end{enumerate}
+  \end{enumerate}
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}{\Large \textbf{Graph Laplacian Matrix}}
+  \begin{enumerate}
+  \item Finding a good partition is NP-hard
+
+
+  \item \textbf{Spectral Graph Partitioning}
+
+    \begin{enumerate}
+    \item Let A: adjacency matrix of undirected graph, G
+
+      A$_{ij}$ = 1 if (i, j ) is an edge, else 0
+
+    \item x is a vector in $\mathcal{R}^n$ with components (x$_1$, ..., x$_n$)
+
+      Think of it as a label/ value of each node of G
+
+    \item \textbf{What is the meaning of A $\cdot$ x?}
+
+      \[y_i = \sum^{n}_{i , j } A_{ij} x_j = \sum_{i, j \in E} x_j\]
+
+      \textbf{Intuition: } y$_i$ is a sum of labels x$_j$ of neighbors of i
+
+    \item \textbf{Spectral Graph Theory}
+
+      \begin{enumerate}
+      \item Analyze the ``spectrum'' of matrix representing G
+
+      \item \textbf{Spectrum: } Eigenvectors x$_i$ of a graph ordered by
+        magnitude of their corresponding eigenvalues $\lambda_i$
+      \end{enumerate}
+      
+    \end{enumerate}
+
+    
+  \end{enumerate}
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{Examples of Eigendecompositions of
+      Graphs}}
+
+  \begin{enumerate}
+  \item \textbf{D-regular graphs}
+    \begin{enumerate}
+    \item Suppose all nodes in G have degree d, and G is connected
+    \item What are some e-vals/vecs of G?
+
+      A $\cdot$ x = $\lambda$ $\cdot$ x \hfill What is $\lambda$? What is x?
+
+      If we let x = [1]$_n$, then we get $\lambda$ = [d]$_n$
+    \end{enumerate}
+
+  \item \textbf{Graph on 2 separate components}
+    \begin{enumerate}
+    \item \textbf{G not connected?}
+
+      \begin{enumerate}
+
+      \item What are some eigenvectors?
+
+      \item In this case, we have two cases of x: x' and x'', s.t x' = [1, 1, ..., 0,
+      0] where it is 1 when describing elements in A, and 0 when describing
+      elements in B. The opposite is true for x''.
+
+    \item Then, we have x' = [1,1,...,0,0] then A $\cdot$ x' = [d,d,...,0,0] and x'' =
+      [0,0,...,d,d]
+
+      \end{enumerate}
+
+    \item \textbf{But what if the graph is badly connected?}
+      
+      \begin{tabular}{c c}
+        \multicolumn{2}{c}{\includegraphics[width=10cm]{eigen_c_vs_bc}}\\
+        Disconnected & Badly Connected\\
+        $\lambda_1$ = $\lambda_2$ & $\lambda_1$ $\simeq$ $\lambda_2$
+      \end{tabular}
+
+      Serves as an estimate
+    \end{enumerate}
+  \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{Defining the Graph Laplacian}}
+
+  We have two graphs:
+  \begin{enumerate}
+  \item \textbf{Adjacency Matrix, A}
+    \begin{enumerate}
+    \item N x N matrix
+    \item A$_{ij}$ = 1 if there is a connection and 0 if there is none
+    \item \textbf{Properties}
+      Is symmetric
+      
+      Eigenvectors are real, and orthogonal
+    \end{enumerate}
+
+  \item \textbf{Degree Matrix, D}
+    \begin{enumerate}
+    \item N x N diagonal matrix
+    \item D = [d$_{ij}$], d$-{ij}$ = degree of node i
+    \end{enumerate}
+
+  \item \textbf{Graph Laplacian Matrix, L}
+    \begin{enumerate}
+    \item N x N symmetric matrix
+    \item L = D - A
+    \item \textbf{What is a trivial eigenpair}
+
+      x = [1]$_n$, then L$\cdot$x = 0, so $\lambda$ = $\lambda_1$ = 0
+
+    \item \textbf{Properties}
+
+      Eigenvalues are non-negative real numbers
+
+      Eigenvectors are real and orthogonal
+      
+    \end{enumerate}
+  \end{enumerate}
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{Spectral Graph Partitioning: Finding a
+      Partition}}
+
+  \textbf{Goal: } Intuition into what eigenvalues and eigenvectors of the graph
+  laplacian matrix mean
+  
+  \begin{enumerate}
+  \item \textbf{$\lambda_2$ as an optimization problem}
+
+    Fact (given w/o proof): For a symmetric matrix, M:
+
+    \[\lambda_2 = min_x \frac{x^TMx}{x^Tx}\]
+
+
+  \item What is the meaning of min x$^T$Lx on G?
+
+    \begin{align*}
+      x^TLx &= \sum_{i, j = 1}^n L_{ij} x_i x_j \\
+            & = \sum_{i, j = 1}^n (D_{ij} - A_{ij}) x_i x_j \tag{Substitute in definition of L} \\
+            & = \sum_{i, j = 1}^n D_{ii} x_i^2 - \sum_{(i,j)\in E}2x_ix_j \\
+            & \text{Term 1: Because D is diagonal, and 0 everywhere else}\\
+            & \text{Term 2: A$\cdot$ x is basically a summation of all edges of the matrix}\\
+            & = \sum_{i, j \in E} (x_i^2 + x_j^2 - 2x_ix_j)\\
+            & \text{Node i has degree d$_i$. So, value of x$_i$ needs to be summed up d$_i$ times, but each edge (i,j) has two endpoints}\\
+            & = \sum_{i, j \in E} (x_i + x_j)^2
+    \end{align*}
+
+  \item What else do we know about x?
+
+    \begin{enumerate}
+    \item x is a unit vector
+    \item x is orthogonal to 1$^{st}$ eigenvector(1,...,1) thus: $\sum_ix_i \cdot$ 1 =
+      $\sum_ix_i$ = 0
+      
+    \item \textbf{Remember}
+      
+      \[\lambda_2 = min_{el} \frac{x^TMx}{x^Tx}\]
+
+      el = all labelings of nodes i so that $\sum x_i$ = 0 (meaning we're trying to
+      minimize the difference aross the clusters)
+
+      \begin{enumerate}
+      \item denominator = 1 from earlier
+      \item  We want to assign values x$_i$ to nodes i such that few edges cross 0 (i.e
+      we want x$_i$ and x$_j$ to subtract each other)
+    \end{enumerate}
+      
+  \end{enumerate}
+
+\item \textbf{Finding the optimal cut}
+
+  \begin{enumerate}
+  \item Express partition (A,B) as a vector
+
+    \[y_i = 1 \text{ if } i \in \text{ A and -1 if } i \in \text{ B}\]
+
+  \item We can minimize the cut of the partition by finding a non-trivial vector
+    x that minimizes:
+
+    \[argmin_{y \in |-1, +1|^n} f(y) = \sum_{(i, j) \in K}(y_i - y_j)^2\]
+
+    but we can't solve this exactly, so lets relax y and allow y to take any
+    real value which leads us tooooo
+
+  \item \textbf{Rayleigh Theorem}
+
+    \[min_{y \in \mathcal{R}^n} f(y) = \sum_{(i, j) \in E} (y_i - y_j)^2 = y^TLy\]
+
+    \begin{enumerate}
+    \item $\lambda_2$ = min$_y$ f(y): the minimum value of f(y) is given by the second
+      smallest eigenvalue of the laplacian matrix
+
+    \item x = arg min$_y$ f(y): the optimal solution for y is given by the
+      corresponding eigenvector x, referred to as the Fiedler Vector
+    \end{enumerate}
+  \end{enumerate}
+    
+\end{enumerate}
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{Spectral Clustering: Three Steps}}
+
+  \begin{enumerate}
+  \item Pre-Processing:
+
+    construct a matrix representation of the graph
+
+  \item Decomposition:
+
+    a) Compute eigenvalues and eigenvectors of the matrix (in particular $\lambda_2$)
+
+    b) Map each point to a lower dimensional representaiton based on one or more
+    eigenvectors
+
+  \item Grouping:
+
+    Assign points to two or more clusters based on the new representation
+    
+  \end{enumerate}
+  
+  \textbf{Conducting grouping, aka step 3}
+
+  \begin{enumerate}
+  \item Sort components of reduced 1-dimensional vector
+  \item Identify clusters by splitting the sorted vector into two
+
+    How do we choose a splitting point?
+    \begin{enumerate}
+    \item Naive approaches:
+
+      Split at 0
+
+      Split at median value
+
+    \item Expensive approaches:
+
+      Minimize normalized cut in 1-dimension (sweep over ordering of nodes
+      induced by eigenvector)
+    \end{enumerate}
+
+
+  \item \textbf{K-way spectral clustering}
+
+    Two main approaches 
+    \begin{enumerate}
+    \item Recursive bi-partitioning (as name suggests)
+
+      inefficient and unstable
+
+    \item Cluster multiple eigenvectors
+
+      Calculate all the eigenvalues, then now every node of the graph can be
+      described by a small vector of values aka its coordinates. We then use
+      K-means to group the values
+      
+    \end{enumerate}
+  \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\Large \textbf{Analysis of Large Graphs: Trawling}}
+
+  \textbf{Searching for small communities}
+  \begin{enumerate}
+  \item \textbf{Goal}
+
+    Enumerate complete bipartite subgraphs K$_{s,t}$
+
+    where K$_{s,t}$: s nodes on the ``left '' where each links to the same t
+    other nodes on the right
+
+  \item \textbf{Solution:}
+
+    \textbf{Market Basket Analysis}
+    \begin{enumerate}
+    \item Comes from frequent itemset enumeration
+    \item Market basket analysis
+
+      \begin{enumerate}
+      \item Market: Universe U of n items
+      \item Baskets: m subsets of U: S$_1$, ... S$_m$ $\subset$ U, (S$_i$ is a set of
+        items one person bought)
+      \item Support: frequency threshold f
+
+        So, we are trying to find all subsets T, s.t T$\subseteq$ S$_i$ of at least f
+        sets S$_i$ (items in T were bought together at least f times)
+      \end{enumerate}
+
+      \textbf{From itemsets to bipartite K$_{s,t}$}
+
+      \begin{enumerate}
+      \item Frequent itemsets = complete bipartite graphs
+      \item View each node i as a set S$_i$ of nodes i points to
+      \item K$_{s,t}$ = a set Y of size t that occurs in s sets S$_i$
+      \item Looking for K$_{s,t}$ set of frequency threshold to s and look at
+        layer t- all frequent sets of size t
+      \end{enumerate}
+
+      \begin{center}
+        \includegraphics[width=8cm]{bipartite_example_1}
+      \end{center}
+
+      
+    \end{enumerate}
+    
+  \end{enumerate}
+  
+\end{homeworkProblem}
+
+\end{document}

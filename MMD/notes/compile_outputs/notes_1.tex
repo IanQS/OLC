@@ -1,0 +1,265 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Structured General Purpose Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when
+% writing assignment content.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{graphicx} % Required to insert images
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the
+% template
+\usepackage{amsmath}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ (\hmwkTitle)} % Top center header
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Topic \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkClass}{Mining Massive Datasets} % Course/class
+\newcommand{\hmwkTitle}{Week 1: MapReduce} % Assignment title
+\newcommand{\hmwkClassTime}{-} % Class/lecture time
+\newcommand{\hmwkAuthorName}{Ian Quah (itq)} % Your name
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+% To have just one problem per page, simply put a \clearpage after each problem
+
+\newpage
+
+\begin{homeworkProblem}{}
+Map, Reduce and program structure\vspace{10pt} % Question
+
+\problemAnswer{ % Answer
+
+
+  \begin{enumerate}
+  \item   Map: (input elements) $\rightarrow$ (0 ++ key-value pairs)
+  \item Reduce (key [V$_1$, V$_2$, .... , V$_n$]) $\rightarrow$ (0 ++ key-value pairs)
+
+    \begin{enumerate}
+    \item If the reducer function is associative and commutative (order doesn't
+      matter) can push off computation to map function.
+    \item This is the concept behind a combiner: (map $\rightarrow$ reduce) $\rightarrow$ reduce
+
+      Examples:
+      \begin{enumerate}
+      \item       sum is associative and commutative
+      \item average is not, however, if we store the aggregate as (sum, \# elems), we
+        can reduce the number of tuples required to be transferred
+      \end{enumerate}
+    \end{enumerate}
+  \item Functions provided by the user:
+    \begin{enumerate}
+    \item map
+    \item reduce
+    \item hash (optional): for user-specified grouping + specifying where to
+      send jobs to
+    \end{enumerate}
+
+\item Structure of Program
+    \begin{enumerate}
+    \item Master node sends data to all compute nodes, then periodically
+      pings them
+    \item Dealing with Failure:
+      \begin{enumerate}
+      \item Only failure on master can bring the whole thing down
+      \item Bc master can know when things are down (ping), it can detect if
+        a node failed if it did, the entire calculation must be restarted (as
+        data for reduce was stored in failed node)
+      \item Master assigns the original task to whichever cluster frees up,
+        then notifies reduce that the source
+        of incoming data is changing
+      \end{enumerate}
+    \end{enumerate}
+  \end{enumerate}
+}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+
+  Relational algebra
+
+  \problemAnswer{
+    \begin{enumerate}
+    \item Definitions:
+      \begin{itemize}
+      \item Attributes: Column headers
+      \item Relation: table with attributes
+      \item tuples: rows of the relation
+      \item Schema: set of attributes of a relation
+      \item R(A$_1$, A$_2$, ..., A$_n$):
+        - Relation name: R
+
+        - attributes: A$_1$,....A$_n$
+      \end{itemize}
+    \end{enumerate}
+
+    \begin{enumerate}
+    \item Relational Algebra Operations and definitions
+      \begin{itemize}
+      \item Selection:
+        \begin{itemize}
+        \item Apply condition C to each tuple.
+        \item Returns only tuples that satisfy C
+        \item Denoted $\sigma_C$(R)
+        \end{itemize}
+      \end{itemize}
+
+      \begin{itemize}
+      \item Projection:
+        \begin{itemize}
+        \item For some subset S of attributes ofR
+        \item produce from each tuple only components for attributes in S
+        \item Denoted $\pi_S$(R)
+        \end{itemize}
+      \end{itemize}
+
+      \begin{itemize}
+      \item Union, Intersection, Difference:
+        \begin{itemize}
+        \item Duh
+        \end{itemize}
+      \end{itemize}
+
+      \begin{itemize}
+      \item Natural Join:
+        \begin{itemize}
+        \item Denoted as R$_1$ $\bowtie$ R$_2$
+        \item Given R$_1$, R$_2$, compare each pair of tuples
+        \item If agree on ALL attributes common between the two:
+          \begin{itemize}
+          \item return tuple s.t
+          \item \textbf{Cond 1}: has components for each attribute in either schema
+          \item \textbf{Cond 2}: agrees with two tuples on all attribs
+          \end{itemize}
+        \item else:
+          \begin{itemize}
+          \item return None
+          \end{itemize}
+
+        \item Discussion below talks about Nat Joins, but also applies to
+          \textit{equijoins}
+          - equality covers equality of attributes that do not necessarily have
+          the same name
+        \end{itemize}
+      \end{itemize}
+
+      \begin{itemize}
+      \item Grouping and Aggregation:
+        \begin{itemize}
+        \item Duh
+        \end{itemize}
+      \end{itemize}
+
+    \end{enumerate}
+
+  }
+
+\end{homeworkProblem}
+
+
+\end{document}

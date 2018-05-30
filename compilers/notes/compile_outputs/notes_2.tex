@@ -1,0 +1,520 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Structured General Purpose Assignment
+% LaTeX Template
+%
+% This template has been downloaded from:
+% http://www.latextemplates.com
+%
+% Original author:
+% Ted Pavlic (http://www.tedpavlic.com)
+%
+% Note:
+% The \lipsum[#] commands throughout this template generate dummy text
+% to fill the template out. These commands should all be removed when
+% writing assignment content.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage{graphicx} % Required to insert images
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the
+\usepackage{ textcomp }
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+% template
+
+\usepackage{amsmath}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ (\hmwkTitle)} % Top center header
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Topic \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkClass}{Compilers} % Course/class
+\newcommand{\hmwkTitle}{Week 2} % Assignment title
+\newcommand{\hmwkClassTime}{-} % Class/lecture time
+\newcommand{\hmwkAuthorName}{Ian Quah (itq)} % Your name
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+\newpage
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+% To have just one problem per page, simply put a \clearpage after each problem
+
+\begin{homeworkProblem}{Lexical Analysis - Introduction}
+
+\problemAnswer{ % Answer
+\begin{enumerate}
+\item String $\rightarrow$ Lexical analyzer $\rightarrow$  (\textlangle class, string\textrangle
+  \textbf{a.k.a} Token) $\rightarrow$ parser
+\item \textbf{E.g}: foo = 42 $\rightarrow$ $<$ID, ``FOO'' $>$ $<$ OP, ``=''$>$ $<$
+  Int,``42''$>$
+  \item \begin{enumerate}
+    \item \textbf{Operators}
+    \item Whitespace
+    \item Keywords
+    \item Identifiers
+    \item Numbers
+    \item ( - open parens
+    \item ) - closed parens
+    \item ; - semi-colon
+    \end{enumerate}
+    The last 3 are often token classes of their own
+\end{enumerate}
+}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{Lexical Analysis - Examples}
+
+\problemAnswer{ % Answer
+\begin{enumerate}
+\item \textbf{Lookahead}
+
+  Necessary to disambiguate certain cases: might be the case that only much
+  later in the program two cases are different.
+
+  Necessary to decide where one token ends and next begins.
+
+  Always necessary but we want to bound it as it increases complexity like crazy
+
+\item \textbf{Goal}
+
+  Partition input string into lexemes
+
+  identify the token of each lexeme
+
+\item Left-to-right scan makes lookahead necessary
+\end{enumerate}
+}
+\end{homeworkProblem}
+
+\newpage
+\begin{homeworkProblem}{Lexical Analysis - Regular Languages}
+
+\problemAnswer{ % Answer
+\begin{enumerate}
+\item Regular Languages:
+
+  \begin{enumerate}
+  \item Generally use Regexp to define them
+  \item Specifies what set of languages are in a token class
+  \item Single char:
+
+    'c' = \{ ``c''\}: a language containing just the single character ``c''
+  \item
+  \item $\epsilon$
+
+    $\epsilon$ = \{``''\}: the language containing the empty string. Is \textbf{NOT}
+    null set
+
+  \item union
+
+    A + B = \{a $|$ a $\in$ A\} $\cup$ \{b $|$ b $\in$ B\}
+
+  \item Concat
+
+    AB = \{ab $|$ a $\in$ A $\wedge$  b $\in$ B \}
+
+  \item Iteration a.k.a Kleene closure
+
+    A* = $\cup_{i \geq 0} A^i$ \hspace{1 cm} A with itself i times.
+
+    A$^0$ == $\epsilon$
+  \end{enumerate}
+\item Regular expressions over $\Sigma$ are the smallest set of expressions including:
+
+  R = $\epsilon$
+
+  $|$ 'c' s.t c $\in$ $\Sigma$
+
+  $|$ R + R
+
+  $|$ RR
+
+  $|$ R$^*$
+
+  All this is known as a grammar
+
+\item Consider a language with the alphabet 0, 1 s.t: $\Sigma$ = \{0, 1\}
+  \begin{enumerate}
+  \item   1$^*$ = \hfill ``'', 1, 11, 111,....
+  \item  (1 + 0) 1 = \{ab | a $\in$ $\wedge$ b $\in$ B\} = \hfill \{11, 10\}
+  \item   (1 + 0)$^*$ 1 = ``'', 0 + 1, (1 + 0)(1 + 0), ... \hfill $\Sigma^*$
+
+    $\Sigma^*$ is the set of all strings you can form out of the alphabet
+  \end{enumerate}
+
+\end{enumerate}
+}
+\end{homeworkProblem}
+
+\newpage
+\begin{homeworkProblem}{Lexical Analysis - Formal Languages}
+
+\problemAnswer{ % Answer
+\begin{enumerate}
+\item \textbf{Definition: Formal Language}
+
+  Let $\Sigma$ be a set of characters(an alphabet)
+
+  A language over $\Sigma$ is a set of strings drawn from that alphabet
+
+  difference between
+  \href{https://cs.stackexchange.com/questions/55013/what-is-the-difference-between-formal-language-regular-language-and-regular-exp}{formal,
+    regular, language, expression}
+
+\item \textbf{Definition: Meaning Function, L}
+  Using the regexp notation from earlier:
+
+  \begin{enumerate}
+  \item L: expr $\rightarrow$ Sets of Strings
+  \item L('c') = \{ ``c''\}
+  \item L($\epsilon$) =  \{``''\}
+  \item union \hfill L(A + B) = \{a $|$ a $\in$ L (A)\} $\cup$ \{b $|$ b $\in$ L(B)\}
+  \item Concat \hfill L(AB) = \{ab $|$ a $\in$ L(A) $\wedge$  b $\in$ L(B) \}
+  \item Iteration a.k.a Kleene closure \hfill L(A*) = $\cup_{i \geq 0} L(A^i)$
+  \end{enumerate}
+
+  Why is L important?
+
+  \begin{enumerate}
+  \item More E than M: many ways to express same meaning
+  \item Makes clear what is syntax and what is semantics : important (consider
+    how Roman numerals and current number system have same meaning, but
+    different notation)
+
+    This allows us to separate the two and consider different ways of
+    representation, allowing us to explore different notations
+  \end{enumerate}
+
+\end{enumerate}
+}
+\end{homeworkProblem}
+
+\newpage
+\begin{homeworkProblem}{\textbf{Lexical Analysis - Lexical Specifications}}
+
+\begin{enumerate}
+\item Strings
+  \begin{enumerate}
+  \item if... then... else...
+  \item \textbf{Two equivalent forms} \hfil (concat then union)
+
+    `i' 'f' + 'e' 'l' 's' 'e'
+
+    'if' + 'else'
+  \end{enumerate}
+\item Digits
+  \begin{enumerate}
+  \item digit = '0' + '1' + ... + '9' \hfil Let digits refer to regexp
+    containing all above
+
+    - Refers to single digit
+  \item digit$^*$
+
+    - denotes almost all digits, except the first letter could be
+    ``'',
+
+    - to fix: digit digit$^*$ or digit+ (based on standard regexp)
+  \end{enumerate}
+
+\item Identifiers
+  \begin{enumerate}
+  \item Strings of letters or digits starting with an letter
+
+    letter = 'a' + 'b' + ... + 'z' + 'A' + ... + 'Z' == [a-zA-Z]
+
+  \item Identifier: letter(letter + digit)$^*$
+  \end{enumerate}
+
+\item Whitespace
+  \begin{enumerate}
+  \item non-empty sequence of blanks, newlines, and tabs
+  \item blank : ' '
+  \item newlines : '\textbackslash n'
+  \item tabs : '\textbackslash t'
+  \end{enumerate}
+\end{enumerate}
+
+
+\textbf{Constructing our lexer: Lexical Specification}
+
+
+\begin{enumerate}
+\item Write a rexp for the lexemes of each token class
+  \begin{center}
+    \begin{tabular}{|| c | c||}
+      \hline
+      Token Class & Lexeme\\
+      \hline
+      \hline
+      Number & digit$^+$  \\
+      \hline
+      keyword & ``if'' + ``else'' \\
+      \hline
+      identifier & letter(letter + digit)$^*$\\
+      \hline
+      OpenPar & ``(''\\
+      \hline
+    \end{tabular}
+  \end{center}
+
+\item Construct R, matching all lexems for all tokens
+  \begin{align}
+    R &= Keyword + identifier + Number + ...\\
+    &= R_1 + R_2 + ...
+  \end{align}
+
+  Which is the union of all the lexems from Step 1
+
+\item Let input be x$_1$, ... x$_n$
+  \begin{align}
+    \text{For} i \leq i \leq n:& \\
+                         & if (x_1,...,x_i \in L(R)): \text{remove} x_1,...x_i\\
+  \end{align}
+  \begin{enumerate}
+  \item Maximal munch:
+    \begin{enumerate}
+    \item for some i $\neq$ j, and valid (x$_1$,...x$_i$) and valid (x$_1$, ..., x$_j$)
+      which do we take?
+    \item We take max(i, j)
+    \end{enumerate}
+  \item Which token?
+    \begin{enumerate}
+    \item Recall R = R$_1$ + ... + R$_n$
+    \item given some valid string (x$_1$, ..., x$_n$) s.t $\in$ L(R$_i$) and $\in$
+      L(R$_j$)
+    \item typically just order s.t when pattern matching we choose the one listed
+      first. \textbf{Priority ordering}
+    \item E.g ``if'' is both in the language of keywords and identifiers, but we
+      order it s.t keywords is first
+    \end{enumerate}
+  \item What if no rule matches?
+    \begin{enumerate}
+    \item x$_1$, ..., x$_i$ $\notin$ L(R) ??
+    \item Define an Error string, s.t [all strings that are not matched]
+    \item Has lowest priority in \textbf{priority ordering}
+    \end{enumerate}
+  \end{enumerate}
+\end{enumerate}
+
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\textbf{Finite Automata}}
+
+  \begin{enumerate}
+  \item   Can be seen as analagous to langages, where depending on the string, we
+    can say if it's in the language or not
+  \item note: final state has two circles. Does not have self loop because if we
+    get a string that repeats last character, it might not be in the language
+    (which self loop would imply)
+  \item \textbf{Termination}
+    \begin{enumerate}
+    \item String is finished, but not in accepting state
+    \item Is in a ``dead end''
+    \end{enumerate}
+  \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\textbf{Regexps into NFAs}}
+
+  \begin{enumerate}
+  \item NFA = non-deterministic finite automaton
+  \item For each kind of rexp, build a NFA
+    \begin{enumerate}
+    \item $\epsilon$: \hfill input $\rightarrow^{\epsilon}$ (fin)
+    \item A: \hfill input $\rightarrow^{A}$ A(fin)
+    \item AB: \hfill input $\rightarrow^{A}$ A(not fin) $\rightarrow^{\epsilon}$ B(fin)
+    \item A + B: $\epsilon$ either to A or B then $\epsilon$ to fin
+    \item AB and A+B as an NFA
+
+      \includegraphics[width=13cm]{example_3}
+
+    \item \textbf{Example: } (1 + 0)$^*$1
+
+      \includegraphics[width=13cm]{example_1}
+    \end{enumerate}
+  \end{enumerate}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}{\textbf{NFA to DFA}}
+
+  \textbf{$\epsilon$-closure}
+  \begin{enumerate}
+  \item Defn: all states reachable by consuming an $\epsilon$ from current state.
+
+    \textbf{Example}
+
+    \includegraphics[width=13cm]{example_2}
+  \end{enumerate}
+
+  \textbf{NFA Details}
+  \begin{enumerate}
+  \item NFA may be in many states at once because non-deterministic
+  \item How many states?
+
+    N states
+
+    $|S|$ $\leq$ N
+  \item How many subsets?
+
+    2$^N$ - 1 subsets \hfill May be many, but is \textit{finite}
+
+  \item Comparison between NFA and DFA
+    \begin{center}
+      \begin{tabular}{|c | c| c|}
+        \hline
+        \hline
+        Automata & NFA& DFA \\
+        \hline
+        \hline
+        States & S & subsets of S (except empty set) \\
+        Start & s $\in$ S & $\epsilon$-closure(s) \\
+        Final & F $\subset$ S & \{X $|$ X $\cap$ F $\neq$ $\emptyset$\} \\
+        Transition function & a(X) = \{y $|$ x $\in$ X $\wedge$ X $\rightarrow^a$ Y\} & X $\rightarrow^a$ Y if Y = $\epsilon$-closure(a(X)) \\
+        \hline
+      \end{tabular}
+    \end{center}
+
+
+  \item \textbf{NFA to DFA}
+    \begin{enumerate}
+    \item Begin with the start state, then determine the set of states in the
+      $\epsilon$ closure
+    \item Consider all possible transitions from the ``blob'', and generate new blobs
+    \item Enumerate all the blobs
+    \item Finish
+    \end{enumerate}
+
+    \includegraphics[width=13 cm]{example_4}
+  \end{enumerate}
+
+  The reason we defined the final state that way is that we don't care about any
+  specific final state, we just want to get to a final state.
+
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}{\Large \textbf{Quiz Hints}}
+
+  \begin{enumerate}
+  \item First ignore the $\epsilon$ then find the number of possible strings. Then,
+    consider with 1, 2, 3 and 4 epsilons.
+  \item Consider each ``level'' to be another rule where it goes from level to
+    level. Note, it does not loop on itself so if it's not fully eaten up by the
+    end it's not accepted - this is in line with what happens if you try to
+    construct a DFA
+  \item Remember priority. Also, when they say tokenize here, they mean tokenize
+    the entire thing (so the output of tokenization is the same as the input)
+  \item Just trace it
+  \item I considered the start state to be 1 state as well
+  \item Remember + means 1 or more and * means 0 or more
+  \item -
+  \item -
+  \item -
+  \item I honestly don't remember how I did this without just working it out and
+    spending a lot of time on this, sorry
+  \item Read the definition
+  \item Read the definition (the name itself is helpful here: non-deterministic)
+  \end{enumerate}
+
+\end{homeworkProblem}
+
+\end{document}

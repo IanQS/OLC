@@ -1,0 +1,8 @@
+*.aux
+*.log
+*.gz
+notes/auto
+*.png
+mining.pdf
+Assignments/*
+notes/compile_outputs/auto/
